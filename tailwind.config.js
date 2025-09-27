@@ -9,8 +9,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['Inter', 'sans-serif'],
-        'serif': ['Playfair Display', 'serif'],
+        'sans': ['Raleway', 'sans-serif'],
+        'raleway': ['Raleway', 'sans-serif'],
       },
       colors: {
         'gold': {
