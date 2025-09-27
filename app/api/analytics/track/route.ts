@@ -3,7 +3,23 @@ import { supabase } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
-    const { page, user_agent } = await request.json()
+    // Check if request has body
+    const contentType = request.headers.get('content-type')
+    if (!contentType || !contentType.includes('application/json')) {
+      return NextResponse.json({ error: 'Invalid content type' }, { status: 400 })
+    }
+
+    // Safely parse JSON with fallback
+    let page = 'unknown'
+    let user_agent = 'unknown'
+    
+    try {
+      const body = await request.json()
+      page = body.page || 'unknown'
+      user_agent = body.user_agent || 'unknown'
+    } catch (parseError) {
+      console.warn('Failed to parse JSON, using defaults:', parseError)
+    }
     
     // Get client IP
     const forwarded = request.headers.get('x-forwarded-for')

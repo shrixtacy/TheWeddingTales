@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import LenisProvider from '@/components/LenisProvider'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import PerformanceMonitor from '@/components/PerformanceMonitor'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -39,6 +40,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <LenisProvider>
             {children}
+            <PerformanceMonitor />
           </LenisProvider>
         </ErrorBoundary>
       </body>
