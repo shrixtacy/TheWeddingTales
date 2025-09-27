@@ -146,6 +146,9 @@ export default function ImageUpload() {
             <option value="engagement">Engagement</option>
             <option value="portrait">Portrait</option>
             <option value="event">Event</option>
+            <option value="family">Family</option>
+            <option value="baby">Baby</option>
+            <option value="couples">Couples</option>
           </select>
         </div>
       </div>
