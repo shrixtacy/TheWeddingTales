@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import LenisProvider from '@/components/LenisProvider'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -35,9 +36,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen">
-        <LenisProvider>
-          {children}
-        </LenisProvider>
+        <ErrorBoundary>
+          <LenisProvider>
+            {children}
+          </LenisProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

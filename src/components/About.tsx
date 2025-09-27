@@ -1,7 +1,46 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Camera, Video, Award, Users, Heart, Star } from 'lucide-react';
 
 const About: React.FC = () => {
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const rotateX = (e.clientY - centerY) / 60;
+    const rotateY = (centerX - e.clientX) / 60;
+    
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const stats = [
     { icon: Camera, number: '500+', label: 'Weddings Captured' },
     { icon: Video, number: '1000+', label: 'Hours of Footage' },
@@ -28,14 +67,18 @@ const About: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+    <section ref={sectionRef} id="about" className="py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-600/5 rounded-full -translate-y-48 translate-x-48" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-600/10 rounded-full translate-y-32 -translate-x-32" />
       
       <div className="max-w-7xl mx-auto px-4 relative">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className={`text-center mb-20 transition-all duration-1500 ease-in-out delay-300 ${
+          isVisible 
+            ? 'opacity-100 blur-0 translate-y-0' 
+            : 'opacity-0 blur-lg translate-y-8'
+        }`}>
           <h2 className="text-5xl font-bold text-gray-900 mb-6">
             About <span className="text-yellow-600">The Wedding Tale</span>
           </h2>
@@ -48,12 +91,20 @@ const About: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-20">
           {/* Portrait Section */}
-          <div className="relative group">
-            <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+          <div className="relative group perspective-1000">
+            <div 
+              ref={cardRef}
+              className="relative overflow-hidden rounded-2xl shadow-2xl transition-transform duration-700 hover:scale-105 tilt-container"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              style={{
+                transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(1, 1, 1)`,
+              }}
+            >
               <img 
-                src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop"
+                src="/images/6S8A9608.jpg"
                 alt="Shri Portrait"
-                className="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-[800px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
@@ -63,7 +114,11 @@ const About: React.FC = () => {
           </div>
 
           {/* Content Section */}
-          <div className="space-y-8">
+          <div className={`space-y-8 transition-all duration-1500 ease-in-out delay-600 ${
+            isVisible 
+              ? 'opacity-100 blur-0 translate-y-0' 
+              : 'opacity-0 blur-lg translate-y-8'
+          }`}>
             <div>
               <h3 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
                 Crafting <span className="text-yellow-600">Timeless</span><br />
@@ -103,7 +158,11 @@ const About: React.FC = () => {
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-8 transition-all duration-1500 ease-in-out delay-900 ${
+          isVisible 
+            ? 'opacity-100 blur-0 translate-y-0' 
+            : 'opacity-0 blur-lg translate-y-8'
+        }`}>
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
             return (

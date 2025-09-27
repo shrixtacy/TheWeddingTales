@@ -14,3 +14,22 @@ html {
 body {
   font-family: var(--font-inter);
 }
+
+/* 3D Tilt Effect */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.hover\:rotateX-12:hover {
+  transform: rotateX(12deg);
+}
+
+.hover\:rotateY-12:hover {
+  transform: rotateY(12deg);
+}
+
+/* Enhanced 3D tilt with mouse position */
+.tilt-container {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}

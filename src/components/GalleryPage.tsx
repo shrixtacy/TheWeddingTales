@@ -1,75 +1,50 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { useAnalytics } from '@/hooks/useAnalytics';
+import LoadingSpinner from './LoadingSpinner';
+
+interface GalleryImage {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  cloudinary_url: string;
+  public_id: string;
+  uploaded_at: string;
+}
 
 const GalleryPage: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const galleryImages = [
-    {
-      src: 'https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop',
-      alt: 'Wedding Ceremony',
-      category: 'Ceremony'
-    },
-    {
-      src: 'https://images.pexels.com/photos/1287460/pexels-photo-1287460.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop',
-      alt: 'Bridal Portrait',
-      category: 'Portraits'
-    },
-    {
-      src: 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop',
-      alt: 'Wedding Details',
-      category: 'Details'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=800&fit=crop&crop=center',
-      alt: 'Couple Session',
-      category: 'Couples'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&h=800&fit=crop&crop=center',
-      alt: 'Reception',
-      category: 'Reception'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?w=1200&h=800&fit=crop&crop=center',
-      alt: 'Wedding Party',
-      category: 'Wedding Party'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200&h=800&fit=crop&crop=center',
-      alt: 'Getting Ready',
-      category: 'Getting Ready'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=800&fit=crop&crop=center',
-      alt: 'First Look',
-      category: 'First Look'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&h=800&fit=crop&crop=center',
-      alt: 'Dancing',
-      category: 'Reception'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?w=1200&h=800&fit=crop&crop=center',
-      alt: 'Wedding Venue',
-      category: 'Venue'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200&h=800&fit=crop&crop=center',
-      alt: 'Wedding Rings',
-      category: 'Details'
-    },
-    {
-      src: 'https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop',
-      alt: 'Wedding Cake',
-      category: 'Reception'
+  // Track page view
+  useAnalytics('gallery');
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  const fetchImages = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('gallery_images')
+        .select('*')
+        .order('uploaded_at', { ascending: false });
+
+      if (error) throw error;
+      setGalleryImages(data || []);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const categories = ['All', 'Ceremony', 'Portraits', 'Details', 'Couples', 'Reception', 'Wedding Party', 'Getting Ready', 'First Look', 'Venue'];
+  const categories = ['All', ...new Set(galleryImages.map(img => img.category))];
   const [activeCategory, setActiveCategory] = useState('All');
 
   const filteredImages = activeCategory === 'All' 
@@ -123,31 +98,46 @@ const GalleryPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Masonry Grid */}
-          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
-            {filteredImages.map((image, index) => (
-              <div
-                key={index}
-                className="break-inside-avoid group cursor-pointer"
-                onClick={() => setSelectedImage(index)}
-              >
-                <div className="relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
-                        <span className="text-gray-800 font-medium">{image.category}</span>
+          {/* Loading State */}
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600"></div>
+            </div>
+          ) : (
+            <>
+              {/* Masonry Grid */}
+              <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+                {filteredImages.map((image, index) => (
+                  <div
+                    key={image.id}
+                    className="break-inside-avoid group cursor-pointer"
+                    onClick={() => setSelectedImage(index)}
+                  >
+                    <div className="relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                      <img
+                        src={image.cloudinary_url}
+                        alt={image.title}
+                        className="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                            <span className="text-gray-800 font-medium">{image.category}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+
+              {filteredImages.length === 0 && !loading && (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 text-lg">No images found in this category.</p>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
 
@@ -177,15 +167,18 @@ const GalleryPage: React.FC = () => {
 
           <div className="max-w-5xl max-h-[90vh] flex items-center justify-center">
             <img
-              src={filteredImages[selectedImage].src}
-              alt={filteredImages[selectedImage].alt}
+              src={filteredImages[selectedImage].cloudinary_url}
+              alt={filteredImages[selectedImage].title}
               className="max-w-full max-h-full object-contain rounded-lg"
             />
           </div>
           
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
-            <p className="text-lg font-medium">{filteredImages[selectedImage].alt}</p>
-            <p className="text-sm text-gray-300">{selectedImage + 1} of {filteredImages.length}</p>
+            <p className="text-lg font-medium">{filteredImages[selectedImage].title}</p>
+            {filteredImages[selectedImage].description && (
+              <p className="text-sm text-gray-300 mt-1">{filteredImages[selectedImage].description}</p>
+            )}
+            <p className="text-sm text-gray-300 mt-2">{selectedImage + 1} of {filteredImages.length}</p>
           </div>
         </div>
       )}
