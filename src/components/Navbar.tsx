@@ -32,9 +32,14 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">WT</span>
+          <div className="flex-shrink-0 flex items-center space-x-3">
+            <div className="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg tracking-wider">TWT</span>
+            </div>
+            <div className="hidden sm:block">
+              <h1 className="text-xl font-bold text-gray-900 tracking-wider">
+                The Wedding Tale
+              </h1>
             </div>
           </div>
 
@@ -46,7 +51,7 @@ const Navbar: React.FC = () => {
                   <a
                     key={item.name}
                     href={item.href}
-                    className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                    className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium tracking-wider transition-colors duration-200"
                   >
                     {item.name}
                   </a>
@@ -54,7 +59,7 @@ const Navbar: React.FC = () => {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                    className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium tracking-wider transition-colors duration-200"
                   >
                     {item.name}
                   </Link>
@@ -83,7 +88,7 @@ const Navbar: React.FC = () => {
                   <a
                     key={item.name}
                     href={item.href}
-                    className="text-gray-700 hover:text-yellow-600 block px-3 py-2 text-base font-medium transition-colors duration-200"
+                    className="text-gray-700 hover:text-yellow-600 block px-3 py-2 text-base font-medium tracking-wider transition-colors duration-200"
                     onClick={() => setIsOpen(false)}
                   >
                     {item.name}
@@ -92,7 +97,7 @@ const Navbar: React.FC = () => {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="text-gray-700 hover:text-yellow-600 block px-3 py-2 text-base font-medium transition-colors duration-200"
+                    className="text-gray-700 hover:text-yellow-600 block px-3 py-2 text-base font-medium tracking-wider transition-colors duration-200"
                     onClick={() => setIsOpen(false)}
                   >
                     {item.name}

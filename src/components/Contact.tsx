@@ -86,17 +86,17 @@ const Contact: React.FC = () => {
             ? 'opacity-100 blur-0 translate-y-0' 
             : 'opacity-0 blur-lg translate-y-8'
         }`}>
-          <h2 className="text-5xl font-bold mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 px-4">
             Let's Create <span className="text-yellow-600">Magic Together</span>
           </h2>
-          <div className="w-20 h-1 bg-yellow-600 mx-auto mb-8" />
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <div className="w-16 sm:w-20 h-1 bg-yellow-600 mx-auto mb-6 sm:mb-8" />
+          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-4">
             Ready to transform your love story into captivating visuals? Let's discuss your vision 
             and create something beautiful together.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20">
           {/* Contact Info */}
           <div className={`space-y-12 transition-all duration-1500 ease-in-out delay-600 ${
             isVisible 
@@ -104,7 +104,7 @@ const Contact: React.FC = () => {
               : 'opacity-0 blur-lg translate-y-8'
           }`}>
             <div>
-              <h3 className="text-3xl font-bold mb-6">Get in Touch</h3>
+              <h3 className="text-2xl sm:text-3xl font-bold mb-6">Get in Touch</h3>
               <p className="text-gray-300 text-lg leading-relaxed mb-8">
                 Every great love story deserves to be told beautifully. Share your vision with us, 
                 and let's bring your special day to life through the power of visual storytelling.

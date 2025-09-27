@@ -9,18 +9,18 @@ const Services: React.FC = () => {
 
   // Gallery images with different sizes for masonry effect
   const galleryImages = [
-    { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=600&fit=crop', alt: 'Wedding Ceremony', size: 'tall' },
-    { src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=400&h=300&fit=crop', alt: 'Bridal Portrait', size: 'wide' },
-    { src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=500&fit=crop', alt: 'Wedding Reception', size: 'medium' },
-    { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=400&fit=crop', alt: 'Couple Portrait', size: 'square' },
-    { src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=400&h=700&fit=crop', alt: 'Wedding Details', size: 'tall' },
-    { src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=350&fit=crop', alt: 'Bridal Party', size: 'wide' },
-    { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=450&fit=crop', alt: 'Wedding Venue', size: 'medium' },
-    { src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=400&h=550&fit=crop', alt: 'Wedding Rings', size: 'tall' },
-    { src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=400&fit=crop', alt: 'Wedding Dance', size: 'square' },
-    { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=650&fit=crop', alt: 'Wedding Kiss', size: 'tall' },
-    { src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=400&h=320&fit=crop', alt: 'Wedding Cake', size: 'wide' },
-    { src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=480&fit=crop', alt: 'Wedding Flowers', size: 'medium' },
+    { src: '/images/4a41f4753c333868e42cbb9b4a4799e9.jpg', alt: 'Wedding Ceremony', size: 'tall' },
+    { src: '/images/6S7A8566.jpg', alt: 'Bridal Portrait', size: 'wide' },
+    { src: '/images/6S7A8837.jpg', alt: 'Wedding Reception', size: 'medium' },
+    { src: '/images/6S8A0060.jpg', alt: 'Couple Portrait', size: 'square' },
+    { src: '/images/6S8A0849.jpg', alt: 'Wedding Details', size: 'tall' },
+    { src: '/images/6S8A3066.jpg', alt: 'Bridal Party', size: 'wide' },
+    { src: '/images/6S8A6703 (1).jpg', alt: 'Wedding Venue', size: 'medium' },
+    { src: '/images/6S8A7479.jpg', alt: 'Wedding Rings', size: 'tall' },
+    { src: '/images/6S8A7749.jpg', alt: 'Wedding Dance', size: 'square' },
+    { src: '/images/0F6A9741.jpg', alt: 'Wedding Kiss', size: 'tall' },
+    { src: '/images/6S8A0861.jpg', alt: 'Wedding Cake', size: 'wide' },
+    { src: '/images/6S8A7477.jpg', alt: 'Wedding Flowers', size: 'medium' },
   ];
 
   // Duplicate images for infinite scroll
@@ -76,9 +76,16 @@ const Services: React.FC = () => {
           
           .gallery-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
             width: 100%;
+          }
+          
+          @media (max-width: 640px) {
+            .gallery-row {
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 0.75rem;
+            }
           }
           
           .gallery-item {
@@ -114,11 +121,11 @@ const Services: React.FC = () => {
               ? 'opacity-100 blur-0 translate-y-0' 
               : 'opacity-0 blur-lg translate-y-8'
           }`}>
-            <h2 className="text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 px-4">
               Our <span className="text-yellow-600">Gallery</span>
             </h2>
-            <div className="w-16 h-1 bg-yellow-600 mx-auto mb-8" />
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <div className="w-12 sm:w-16 h-1 bg-yellow-600 mx-auto mb-6 sm:mb-8" />
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               Capturing precious moments that tell your unique love story
             </p>
           </div>

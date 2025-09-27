@@ -84,10 +84,10 @@ const Hero: React.FC = () => {
             : 'opacity-0 blur-lg'
         }`}
       >
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 tracking-wider">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 tracking-wider px-4">
           THE WEDDING TALES
         </h1>
-        <p className="text-xl md:text-2xl text-gray-200 mb-8 font-light tracking-wide">
+        <p className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-8 font-light tracking-wide px-4 max-w-4xl">
           Cinematic Wedding Photography & Films
         </p>
         

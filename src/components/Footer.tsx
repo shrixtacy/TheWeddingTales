@@ -5,10 +5,10 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-black text-white py-12">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold tracking-wider">THE WEDDING TALES</h3>
+            <h3 className="text-xl sm:text-2xl font-bold tracking-wider">THE WEDDING TALES</h3>
             <p className="text-gray-400 leading-relaxed">
               Creating timeless wedding stories that resonate with love, emotion and authenticity.
             </p>

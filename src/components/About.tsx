@@ -4,6 +4,12 @@ import { Camera, Video, Award, Users, Heart, Star } from 'lucide-react';
 const About: React.FC = () => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [animatedNumbers, setAnimatedNumbers] = useState({
+    weddings: 0,
+    hours: 0,
+    couples: 0,
+    awards: 0
+  });
   const cardRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -29,9 +35,11 @@ const About: React.FC = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+        } else {
+          setIsVisible(false);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.3 }
     );
 
     if (sectionRef.current) {
@@ -41,11 +49,50 @@ const About: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Animate numbers every time section becomes visible
+  useEffect(() => {
+    if (isVisible) {
+      // Reset numbers to 0 first
+      setAnimatedNumbers({
+        weddings: 0,
+        hours: 0,
+        couples: 0,
+        awards: 0
+      });
+
+      // Start animation after a brief delay
+      setTimeout(() => {
+        const duration = 2000; // 2 seconds
+        const steps = 60; // 60 steps for smooth animation
+        const stepDuration = duration / steps;
+
+        stats.forEach((stat, index) => {
+          const increment = stat.number / steps;
+          let currentStep = 0;
+
+          const timer = setInterval(() => {
+            currentStep++;
+            const newValue = Math.min(Math.floor(increment * currentStep), stat.number);
+            
+            setAnimatedNumbers(prev => ({
+              ...prev,
+              [index === 0 ? 'weddings' : index === 1 ? 'hours' : index === 2 ? 'couples' : 'awards']: newValue
+            }));
+
+            if (currentStep >= steps) {
+              clearInterval(timer);
+            }
+          }, stepDuration);
+        });
+      }, 100); // Small delay to ensure reset is visible
+    }
+  }, [isVisible]);
+
   const stats = [
-    { icon: Camera, number: '500+', label: 'Weddings Captured' },
-    { icon: Video, number: '1000+', label: 'Hours of Footage' },
-    { icon: Users, number: '200+', label: 'Happy Couples' },
-    { icon: Award, number: '15+', label: 'Awards Won' }
+    { icon: Camera, number: 500, label: 'Weddings Captured', suffix: '+' },
+    { icon: Video, number: 1000, label: 'Hours of Footage', suffix: '+' },
+    { icon: Users, number: 200, label: 'Happy Couples', suffix: '+' },
+    { icon: Award, number: 15, label: 'Awards Won', suffix: '+' }
   ];
 
   const values = [
@@ -89,7 +136,7 @@ const About: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center mb-12 lg:mb-20">
           {/* Portrait Section */}
           <div className="relative group perspective-1000">
             <div 
@@ -104,7 +151,7 @@ const About: React.FC = () => {
               <img 
                 src="/images/6S8A9608.jpg"
                 alt="Shri Portrait"
-                className="w-full h-[800px] object-cover"
+                className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
@@ -120,7 +167,7 @@ const About: React.FC = () => {
               : 'opacity-0 blur-lg translate-y-8'
           }`}>
             <div>
-              <h3 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
                 Crafting <span className="text-yellow-600">Timeless</span><br />
                 Wedding Stories
               </h3>
@@ -157,7 +204,7 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Stats Section */}
+        {/* Animated Stats Section */}
         <div className={`grid grid-cols-2 lg:grid-cols-4 gap-8 transition-all duration-1500 ease-in-out delay-900 ${
           isVisible 
             ? 'opacity-100 blur-0 translate-y-0' 
@@ -165,12 +212,19 @@ const About: React.FC = () => {
         }`}>
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
+            const currentValue = index === 0 ? animatedNumbers.weddings : 
+                               index === 1 ? animatedNumbers.hours : 
+                               index === 2 ? animatedNumbers.couples : 
+                               animatedNumbers.awards;
+            
             return (
               <div key={index} className="text-center group">
                 <div className="w-16 h-16 bg-yellow-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-600 transition-colors duration-300">
                   <IconComponent className="text-yellow-600 group-hover:text-white transition-colors duration-300" size={32} />
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">
+                  {currentValue}{stat.suffix}
+                </div>
                 <div className="text-gray-600 font-medium">{stat.label}</div>
               </div>
             );
