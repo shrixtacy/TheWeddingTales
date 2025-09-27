@@ -1,16 +1,19 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isFrameExpanded, setIsFrameExpanded] = useState(false);
+  const [isTextVisible, setIsTextVisible] = useState(false);
+  const textRef = useRef<HTMLDivElement>(null);
   
   const heroImages = [
-    'https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-    'https://images.pexels.com/photos/1287460/pexels-photo-1287460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-    'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop'
+    '/images/6S8A9924.jpg',
+    '/images/6S8A7477.jpg',
+    '/images/6S8A0861.jpg',
+    '/images/3a334794a8235f5788ed5ecf9595bea3.jpg'
   ];
 
   useEffect(() => {
@@ -25,6 +28,14 @@ const Hero: React.FC = () => {
     const timer = setTimeout(() => {
       setIsFrameExpanded(true);
     }, 500); // Start animation after 500ms
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Trigger text blur-in animation
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsTextVisible(true);
+    }, 1000); // Start text animation after 1 second
     return () => clearTimeout(timer);
   }, []);
 
@@ -65,7 +76,14 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Content Overlay */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+      <div 
+        ref={textRef}
+        className={`relative z-10 h-full flex flex-col items-center justify-center text-center px-4 transition-all duration-2000 ease-in-out ${
+          isTextVisible 
+            ? 'opacity-100 blur-0' 
+            : 'opacity-0 blur-lg'
+        }`}
+      >
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 tracking-wider">
           THE WEDDING TALES
         </h1>

@@ -109,10 +109,10 @@ const Services: React.FC = () => {
       <section ref={sectionRef} id="gallery" className="py-20 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
           {/* Header */}
-          <div className={`text-center mb-16 transition-all duration-1000 ${
+          <div className={`text-center mb-16 transition-all duration-1500 ease-in-out delay-300 ${
             isVisible 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-8'
+              ? 'opacity-100 blur-0 translate-y-0' 
+              : 'opacity-0 blur-lg translate-y-8'
           }`}>
             <h2 className="text-5xl font-bold text-gray-900 mb-6">
               Our <span className="text-yellow-600">Gallery</span>
@@ -388,10 +388,10 @@ const Services: React.FC = () => {
           </div>
 
           {/* CTA */}
-          <div className={`text-center mt-16 transition-all duration-1000 ${
+          <div className={`text-center mt-16 transition-all duration-1500 ease-in-out ${
             isVisible 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-8'
+              ? 'opacity-100 blur-0 translate-y-0' 
+              : 'opacity-0 blur-lg translate-y-8'
           }`} style={{ transitionDelay: '800ms' }}>
             <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
               View Full Portfolio

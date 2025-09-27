@@ -1,10 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote, Heart, Camera, Video } from 'lucide-react';
 
 const Testimonials: React.FC = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
   
   const testimonials = [
     {
@@ -63,6 +65,24 @@ const Testimonials: React.FC = () => {
     return () => clearInterval(interval);
   }, [testimonials.length]);
 
+  // Intersection observer for text animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const nextTestimonial = () => {
     setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
   };
@@ -72,14 +92,18 @@ const Testimonials: React.FC = () => {
   };
 
   return (
-    <section className="py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
+    <section ref={sectionRef} className="py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-600/5 rounded-full -translate-y-48 translate-x-48" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-600/10 rounded-full translate-y-32 -translate-x-32" />
       
       <div className="max-w-7xl mx-auto px-4 relative">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className={`text-center mb-20 transition-all duration-1500 ease-in-out delay-300 ${
+          isVisible 
+            ? 'opacity-100 blur-0 translate-y-0' 
+            : 'opacity-0 blur-lg translate-y-8'
+        }`}>
           <h2 className="text-5xl font-bold mb-6">
             What Our <span className="text-yellow-600">Couples Say</span>
           </h2>
@@ -90,7 +114,11 @@ const Testimonials: React.FC = () => {
         </div>
 
         {/* Testimonial Carousel */}
-        <div className="relative bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 md:p-12 mb-20">
+        <div className={`relative bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 md:p-12 mb-20 transition-all duration-1500 ease-in-out delay-600 ${
+          isVisible 
+            ? 'opacity-100 blur-0 translate-y-0' 
+            : 'opacity-0 blur-lg translate-y-8'
+        }`}>
           <div className="flex items-center justify-between mb-8">
             <button 
               onClick={prevTestimonial}
@@ -162,7 +190,11 @@ const Testimonials: React.FC = () => {
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-8 transition-all duration-1500 ease-in-out delay-900 ${
+          isVisible 
+            ? 'opacity-100 blur-0 translate-y-0' 
+            : 'opacity-0 blur-lg translate-y-8'
+        }`}>
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
             return (

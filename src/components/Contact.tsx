@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Phone, MapPin, Send, Instagram, Youtube, Twitter, Calendar, Clock, Heart } from 'lucide-react';
 
 const Contact: React.FC = () => {
@@ -12,6 +12,8 @@ const Contact: React.FC = () => {
     project: '',
     message: ''
   });
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +27,24 @@ const Contact: React.FC = () => {
       [e.target.name]: e.target.value
     });
   };
+
+  // Intersection observer for text animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const contactInfo = [
     {
@@ -54,14 +74,18 @@ const Contact: React.FC = () => {
   ];
 
   return (
-    <section id="contact" className="py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
+    <section ref={sectionRef} id="contact" className="py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-yellow-600/5 rounded-full -translate-x-48 -translate-y-48" />
       <div className="absolute bottom-0 right-0 w-72 h-72 bg-yellow-600/10 rounded-full translate-x-36 translate-y-36" />
       
       <div className="max-w-7xl mx-auto px-4 relative">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className={`text-center mb-20 transition-all duration-1500 ease-in-out delay-300 ${
+          isVisible 
+            ? 'opacity-100 blur-0 translate-y-0' 
+            : 'opacity-0 blur-lg translate-y-8'
+        }`}>
           <h2 className="text-5xl font-bold mb-6">
             Let's Create <span className="text-yellow-600">Magic Together</span>
           </h2>
@@ -74,7 +98,11 @@ const Contact: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           {/* Contact Info */}
-          <div className="space-y-12">
+          <div className={`space-y-12 transition-all duration-1500 ease-in-out delay-600 ${
+            isVisible 
+              ? 'opacity-100 blur-0 translate-y-0' 
+              : 'opacity-0 blur-lg translate-y-8'
+          }`}>
             <div>
               <h3 className="text-3xl font-bold mb-6">Get in Touch</h3>
               <p className="text-gray-300 text-lg leading-relaxed mb-8">
@@ -124,7 +152,11 @@ const Contact: React.FC = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl">
+          <div className={`bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl transition-all duration-1500 ease-in-out delay-900 ${
+            isVisible 
+              ? 'opacity-100 blur-0 translate-y-0' 
+              : 'opacity-0 blur-lg translate-y-8'
+          }`}>
             <div className="flex items-center space-x-3 mb-8">
               <div className="w-12 h-12 bg-yellow-600/20 rounded-xl flex items-center justify-center">
                 <Heart className="text-yellow-600" size={24} />
