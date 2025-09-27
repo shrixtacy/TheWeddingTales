@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
+import Image from 'next/image';
 
-const PhotographySection: React.FC = () => {
+const PhotographySection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   
   const stackImages = [
@@ -19,41 +19,23 @@ const PhotographySection: React.FC = () => {
     '/images/6S8A7749.jpg'
   ];
 
-  // Auto-scroll functionality with smoother timing
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % stackImages.length);
-    }, 4000); // Slightly longer interval for smoother experience
-    return () => clearInterval(interval);
+  // Simplified auto-scroll - always running
+  const nextImage = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % stackImages.length);
   }, [stackImages.length]);
 
-  // Intersection observer for text animation
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
+    const interval = setInterval(nextImage, 4000);
+    return () => clearInterval(interval);
+  }, [nextImage]);
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  // Removed intersection observer for better performance
 
   return (
     <section ref={sectionRef} className="min-h-screen flex flex-col lg:flex-row">
       {/* Left Section - White Background with Text */}
       <div className="w-full lg:w-2/5 bg-white flex flex-col justify-center px-6 sm:px-8 lg:px-12 py-12 lg:py-20">
-        <div className={`transition-all duration-1500 ease-in-out delay-500 ${
-          isVisible 
-            ? 'opacity-100 blur-0 translate-y-0' 
-            : 'opacity-0 blur-lg translate-y-8'
-        }`}>
+        <div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Wed Filmer
           </h2>
@@ -107,11 +89,16 @@ const PhotographySection: React.FC = () => {
                 }}
               >
                 <div className="w-[40rem] h-[40rem] rounded-3xl overflow-hidden shadow-2xl border-4 border-white will-change-transform">
-                  {/* Full card image coverage */}
-                  <div 
-                    className="w-full h-full bg-cover bg-center bg-no-repeat will-change-transform"
+                  {/* Optimized image with Next.js Image component */}
+                  <Image
+                    src={image}
+                    alt={`Wedding photography ${index + 1}`}
+                    width={640}
+                    height={640}
+                    className="w-full h-full object-cover will-change-transform"
+                    quality={75}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40rem"
                     style={{ 
-                      backgroundImage: `url(${image})`,
                       transform: 'translateZ(0)',
                       backfaceVisibility: 'hidden'
                     }}
@@ -128,6 +115,8 @@ const PhotographySection: React.FC = () => {
       </div>
     </section>
   );
-};
+});
+
+PhotographySection.displayName = 'PhotographySection';
 
 export default PhotographySection;

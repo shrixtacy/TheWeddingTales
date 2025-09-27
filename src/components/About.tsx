@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, memo, useCallback } from 'react';
 import { Camera, Video, Award, Users, Heart, Star } from 'lucide-react';
+import Image from 'next/image';
 
-const About: React.FC = () => {
+const About: React.FC = memo(() => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [isVisible, setIsVisible] = useState(false);
   const [animatedNumbers, setAnimatedNumbers] = useState({
     weddings: 0,
     hours: 0,
@@ -13,80 +13,50 @@ const About: React.FC = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     
-    const rotateX = (e.clientY - centerY) / 60;
-    const rotateY = (centerX - e.clientX) / 60;
+    const rotateX = (e.clientY - centerY) / 80; // Reduced sensitivity for smoother performance
+    const rotateY = (centerX - e.clientX) / 80;
     
     setTilt({ x: rotateX, y: rotateY });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
   }, []);
 
-  // Animate numbers every time section becomes visible
+  const handleMouseLeave = useCallback(() => {
+    setTilt({ x: 0, y: 0 });
+  }, []);
+
+  // Removed intersection observer for better performance
+
+  // Simplified number animation - start immediately
   useEffect(() => {
-    if (isVisible) {
-      // Reset numbers to 0 first
-      setAnimatedNumbers({
-        weddings: 0,
-        hours: 0,
-        couples: 0,
-        awards: 0
-      });
+    const duration = 2000; // 2 seconds
+    const steps = 60; // 60 steps for smooth animation
+    const stepDuration = duration / steps;
 
-      // Start animation after a brief delay
-      setTimeout(() => {
-        const duration = 2000; // 2 seconds
-        const steps = 60; // 60 steps for smooth animation
-        const stepDuration = duration / steps;
+    stats.forEach((stat, index) => {
+      const increment = stat.number / steps;
+      let currentStep = 0;
 
-        stats.forEach((stat, index) => {
-          const increment = stat.number / steps;
-          let currentStep = 0;
+      const timer = setInterval(() => {
+        currentStep++;
+        const newValue = Math.min(Math.floor(increment * currentStep), stat.number);
+        
+        setAnimatedNumbers(prev => ({
+          ...prev,
+          [index === 0 ? 'weddings' : index === 1 ? 'hours' : index === 2 ? 'couples' : 'awards']: newValue
+        }));
 
-          const timer = setInterval(() => {
-            currentStep++;
-            const newValue = Math.min(Math.floor(increment * currentStep), stat.number);
-            
-            setAnimatedNumbers(prev => ({
-              ...prev,
-              [index === 0 ? 'weddings' : index === 1 ? 'hours' : index === 2 ? 'couples' : 'awards']: newValue
-            }));
-
-            if (currentStep >= steps) {
-              clearInterval(timer);
-            }
-          }, stepDuration);
-        });
-      }, 100); // Small delay to ensure reset is visible
-    }
-  }, [isVisible]);
+        if (currentStep >= steps) {
+          clearInterval(timer);
+        }
+      }, stepDuration);
+    });
+  }, []);
 
   const stats = [
     { icon: Camera, number: 500, label: 'Weddings Captured', suffix: '+' },
@@ -121,11 +91,7 @@ const About: React.FC = () => {
       
       <div className="max-w-7xl mx-auto px-4 relative">
         {/* Header */}
-        <div className={`text-center mb-20 transition-all duration-1500 ease-in-out delay-300 ${
-          isVisible 
-            ? 'opacity-100 blur-0 translate-y-0' 
-            : 'opacity-0 blur-lg translate-y-8'
-        }`}>
+        <div className="text-center mb-20">
           <h2 className="text-5xl font-bold text-gray-900 mb-6">
             About <span className="text-yellow-600">The Wedding Tale</span>
           </h2>
@@ -148,10 +114,14 @@ const About: React.FC = () => {
                 transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(1, 1, 1)`,
               }}
             >
-              <img 
+              <Image 
                 src="/images/6S8A9608.jpg"
                 alt="Shri Portrait"
+                width={800}
+                height={800}
                 className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] object-cover"
+                quality={75}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
@@ -161,11 +131,7 @@ const About: React.FC = () => {
           </div>
 
           {/* Content Section */}
-          <div className={`space-y-8 transition-all duration-1500 ease-in-out delay-600 ${
-            isVisible 
-              ? 'opacity-100 blur-0 translate-y-0' 
-              : 'opacity-0 blur-lg translate-y-8'
-          }`}>
+          <div className="space-y-8">
             <div>
               <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
                 Crafting <span className="text-yellow-600">Timeless</span><br />
@@ -205,11 +171,7 @@ const About: React.FC = () => {
         </div>
 
         {/* Animated Stats Section */}
-        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-8 transition-all duration-1500 ease-in-out delay-900 ${
-          isVisible 
-            ? 'opacity-100 blur-0 translate-y-0' 
-            : 'opacity-0 blur-lg translate-y-8'
-        }`}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
             const currentValue = index === 0 ? animatedNumbers.weddings : 
@@ -233,6 +195,8 @@ const About: React.FC = () => {
       </div>
     </section>
   );
-};
+});
+
+About.displayName = 'About';
 
 export default About;

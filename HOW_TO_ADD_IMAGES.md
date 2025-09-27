@@ -80,3 +80,5 @@ public/
 3. **Test the website** to see your images in action
 
 
+
+

@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, memo, useCallback } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-const Hero: React.FC = () => {
+const Hero: React.FC = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isFrameExpanded, setIsFrameExpanded] = useState(false);
   const [isTextVisible, setIsTextVisible] = useState(false);
@@ -16,12 +16,15 @@ const Hero: React.FC = () => {
     '/images/3a334794a8235f5788ed5ecf9595bea3.jpg'
   ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
+  // Optimized slide transition with useCallback
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % heroImages.length);
   }, [heroImages.length]);
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, [nextSlide]);
 
   // Trigger frame expansion animation on component mount
   useEffect(() => {
@@ -55,7 +58,7 @@ const Hero: React.FC = () => {
             <div className="absolute inset-0 border-2 border-gray-300"></div>
           </div>
           
-          {/* Image Container - Fixed size, no scaling */}
+          {/* Image Container - Original uncompressed images */}
           <div className="relative w-full h-full overflow-hidden">
             {heroImages.map((image, index) => (
               <div
@@ -75,13 +78,13 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Content Overlay */}
+      {/* Content Overlay - Removed blur effect for better performance */}
       <div 
         ref={textRef}
-        className={`relative z-10 h-full flex flex-col items-center justify-center text-center px-4 transition-all duration-2000 ease-in-out ${
+        className={`relative z-10 h-full flex flex-col items-center justify-center text-center px-4 transition-all duration-1000 ease-in-out ${
           isTextVisible 
-            ? 'opacity-100 blur-0' 
-            : 'opacity-0 blur-lg'
+            ? 'opacity-100' 
+            : 'opacity-0'
         }`}
       >
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 tracking-wider px-4">
@@ -116,6 +119,8 @@ const Hero: React.FC = () => {
       </div>
     </section>
   );
-};
+});
+
+Hero.displayName = 'Hero';
 
 export default Hero;

@@ -1,15 +1,16 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { Play, Pause, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
+import Image from 'next/image';
 
-const PanoramicGallery: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
+const PanoramicGallery: React.FC = memo(() => {
   const [scrollPosition, setScrollPosition] = useState(0);
   
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number>();
 
   // All your wedding photos for the panoramic gallery
   const galleryImages = [
@@ -28,24 +29,26 @@ const PanoramicGallery: React.FC = () => {
     '/images/3a334794a8235f5788ed5ecf9595bea3.jpg'
   ];
 
-  // Auto-scroll functionality - continuous scrolling
+  // Simplified auto-scroll functionality - always running
   useEffect(() => {
-    let animationId: number;
-    
     const animate = () => {
       if (scrollRef.current) {
         setScrollPosition(prev => {
-          const newPosition = prev + 0.5; // Adjust speed here
+          const newPosition = prev + 0.3; // Reduced speed for smoother performance
           const maxScroll = scrollRef.current!.scrollWidth - scrollRef.current!.clientWidth;
           return newPosition >= maxScroll ? 0 : newPosition;
         });
+        animationRef.current = requestAnimationFrame(animate);
       }
-      animationId = requestAnimationFrame(animate);
     };
     
-    animate();
+    animationRef.current = requestAnimationFrame(animate);
     
-    return () => cancelAnimationFrame(animationId);
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
   }, []);
 
   // Update scroll position
@@ -55,52 +58,32 @@ const PanoramicGallery: React.FC = () => {
     }
   }, [scrollPosition]);
 
-  // Intersection observer for animations
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
+  // Removed intersection observer for better performance
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  // Calculate tilt based on position in viewport
-  const getTiltForImage = (index: number, scrollLeft: number) => {
+  // Optimized tilt calculation with memoization
+  const getTiltForImage = useCallback((index: number, scrollLeft: number) => {
     const imageWidth = 400; // Width of each image
     const imagePosition = index * imageWidth - scrollLeft;
     const viewportCenter = (containerRef.current?.clientWidth || 0) / 2;
     const distanceFromCenter = imagePosition - viewportCenter;
-    const maxTilt = 15; // Maximum tilt angle in degrees
+    const maxTilt = 10; // Reduced maximum tilt for better performance
     
     // Calculate tilt based on distance from center
-    const tilt = Math.max(-maxTilt, Math.min(maxTilt, -distanceFromCenter / 20));
+    const tilt = Math.max(-maxTilt, Math.min(maxTilt, -distanceFromCenter / 25));
     return tilt;
-  };
+  }, []);
 
   return (
     <section ref={sectionRef} className="relative min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100 overflow-hidden">
-      {/* Background Elements */}
+      {/* Simplified Background Elements - Removed heavy blur effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-48 h-48 bg-purple-500/5 rounded-full blur-2xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-pink-500/5 rounded-full blur-xl animate-pulse delay-2000"></div>
+        <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500/3 rounded-full"></div>
+        <div className="absolute bottom-20 right-20 w-48 h-48 bg-purple-500/3 rounded-full"></div>
+        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-pink-500/3 rounded-full"></div>
       </div>
 
-      {/* Header */}
-      <div className={`relative z-10 pt-16 pb-8 text-center transition-all duration-1500 ease-in-out delay-300 ${
-        isVisible 
-          ? 'opacity-100 blur-0 translate-y-0' 
-          : 'opacity-0 blur-lg translate-y-8'
-      }`}>
+      {/* Header - Removed blur effect for better performance */}
+      <div className="relative z-10 pt-16 pb-8 text-center">
         <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-4 px-4">
           Your own gallery
         </h2>
@@ -109,12 +92,8 @@ const PanoramicGallery: React.FC = () => {
         </p>
       </div>
 
-      {/* Panoramic Gallery Container */}
-      <div className={`relative mx-auto w-full max-w-7xl transition-all duration-1500 ease-in-out delay-500 ${
-        isVisible 
-          ? 'opacity-100 blur-0 translate-y-0' 
-          : 'opacity-0 blur-lg translate-y-8'
-      }`}>
+      {/* Panoramic Gallery Container - Removed blur effect */}
+      <div className="relative mx-auto w-full max-w-7xl">
         
         {/* Curved Panoramic Container */}
         <div 
@@ -146,16 +125,26 @@ const PanoramicGallery: React.FC = () => {
                   className="flex-shrink-0 relative group"
                   style={{ width: '400px', height: '100%' }}
                 >
-                  {/* Image with Dynamic Tilt Effect */}
+                  {/* Optimized Image with Tilt Effect */}
                   <div 
-                    className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-300"
+                    className="w-full h-full transition-transform duration-200 will-change-transform"
                     style={{ 
-                      backgroundImage: `url(${image})`,
-                      transform: `perspective(1000px) rotateY(${tilt}deg)`,
+                      transform: `perspective(1000px) rotateY(${tilt}deg) translateZ(0)`,
                       transformOrigin: 'center center',
-                      filter: 'brightness(0.9) contrast(1.1)'
+                      filter: 'brightness(0.9) contrast(1.1)',
+                      backfaceVisibility: 'hidden'
                     }}
-                  />
+                  >
+                    <Image
+                      src={image}
+                      alt={`Gallery photo ${index + 1}`}
+                      width={400}
+                      height={300}
+                      className="w-full h-full object-cover"
+                      quality={75}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+                    />
+                  </div>
                   
                 </div>
               );
@@ -185,6 +174,8 @@ const PanoramicGallery: React.FC = () => {
       `}</style>
     </section>
   );
-};
+});
+
+PanoramicGallery.displayName = 'PanoramicGallery';
 
 export default PanoramicGallery;
