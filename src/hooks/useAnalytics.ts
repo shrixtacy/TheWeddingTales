@@ -2,12 +2,18 @@ import { useEffect } from 'react'
 
 export const useAnalytics = (page: string) => {
   useEffect(() => {
-    // Use requestIdleCallback for non-blocking analytics
+    // Debounce analytics to prevent multiple rapid calls
+    let timeoutId: NodeJS.Timeout | null = null
+    let isTracking = false
+
     const trackPageView = async () => {
+      if (isTracking) return
+      isTracking = true
+
       try {
         // Add timeout to prevent hanging
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
+        const fetchTimeoutId = setTimeout(() => controller.abort(), 3000) // Reduced timeout
         
         await fetch('/api/analytics/track', {
           method: 'POST',
@@ -21,21 +27,38 @@ export const useAnalytics = (page: string) => {
           signal: controller.signal,
         })
         
-        clearTimeout(timeoutId)
+        clearTimeout(fetchTimeoutId)
       } catch (error) {
         // Silently fail analytics to not block the UI
         if (error instanceof Error && error.name !== 'AbortError') {
           console.warn('Analytics tracking failed:', error)
         }
+      } finally {
+        isTracking = false
       }
+    }
+
+    // Debounce the analytics call
+    const debouncedTrack = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+      timeoutId = setTimeout(trackPageView, 1000) // Wait 1 second before tracking
     }
 
     // Use requestIdleCallback for better performance
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(trackPageView, { timeout: 2000 })
+      requestIdleCallback(debouncedTrack, { timeout: 2000 })
     } else {
       // Fallback for browsers without requestIdleCallback
-      setTimeout(trackPageView, 100)
+      setTimeout(debouncedTrack, 100)
+    }
+
+    // Cleanup function
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
     }
   }, [page])
 }

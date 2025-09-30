@@ -5,8 +5,8 @@ import { ChevronDown } from 'lucide-react';
 
 const Hero: React.FC = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isFrameExpanded, setIsFrameExpanded] = useState(false);
   const [isTextVisible, setIsTextVisible] = useState(false);
+  const [isTextBlurred, setIsTextBlurred] = useState(true);
   const textRef = useRef<HTMLDivElement>(null);
   
   const heroImages = [
@@ -22,97 +22,97 @@ const Hero: React.FC = memo(() => {
   }, [heroImages.length]);
 
   useEffect(() => {
-    const interval = setInterval(nextSlide, 5000);
+    const interval = setInterval(nextSlide, 6000);
     return () => clearInterval(interval);
   }, [nextSlide]);
 
-  // Trigger frame expansion animation on component mount
+  // Trigger text animation with blur effect
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsFrameExpanded(true);
-    }, 500); // Start animation after 500ms
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Trigger text blur-in animation
-  useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer1 = setTimeout(() => {
       setIsTextVisible(true);
-    }, 1000); // Start text animation after 1 second
-    return () => clearTimeout(timer);
+    }, 800);
+    
+    const timer2 = setTimeout(() => {
+      setIsTextBlurred(false);
+    }, 1200);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
   }, []);
 
   return (
     <section id="home" className="relative h-screen overflow-hidden">
-      {/* Background Slideshow with Animated Frame */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div 
-          className={`relative transition-all duration-2000 ease-out ${
-            isFrameExpanded 
-              ? 'w-full h-full' 
-              : 'w-1/4 h-1/4'
-          }`}
-        >
-          {/* Photo Frame Border */}
-          <div className="absolute inset-0 border-8 border-white shadow-2xl">
-            <div className="absolute inset-0 border-2 border-gray-300"></div>
+      {/* Full-screen background with dramatic overlay */}
+      <div className="absolute inset-0">
+        {heroImages.map((image, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-2000 ease-in-out ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div 
+              className="w-full h-full bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${image})` }}
+            />
+            {/* Dramatic dark overlay for text readability */}
+            <div className="absolute inset-0 bg-black bg-opacity-60" />
           </div>
+        ))}
+      </div>
+
+
+      {/* Main Content - Editorial Style */}
+      <div 
+        ref={textRef}
+        className={`relative z-10 h-full flex flex-col justify-center px-8 transition-all duration-1500 ease-out ${
+          isTextVisible 
+            ? 'opacity-100 translate-y-0' 
+            : 'opacity-0 translate-y-8'
+        }`}
+      >
+        {/* Large Editorial Text with Blur Animation */}
+        <div className="max-w-4xl">
+          <h1 className={`editorial-large text-white mb-8 leading-none hero-text-blur ${
+            !isTextBlurred ? 'visible' : ''
+          }`}>
+            <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
+              INSATIABLE
+            </div>
+            <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
+              IMPACTFUL &
+            </div>
+            <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
+              INTENTIONAL
+            </div>
+          </h1>
           
-          {/* Image Container - Original uncompressed images */}
-          <div className="relative w-full h-full overflow-hidden">
-            {heroImages.map((image, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-opacity duration-2000 ${
-                  index === currentSlide ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <div 
-                  className="w-full h-full bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: `url(${image})` }}
-                />
-              </div>
-            ))}
-            <div className="absolute inset-0 bg-black bg-opacity-40" />
-          </div>
+          <p className={`editorial-subtitle text-gray-300 mb-12 tracking-widest transition-all duration-1000 ease-out delay-700 ${
+            isTextBlurred ? 'blur-sm opacity-0 translate-y-4' : 'blur-none opacity-100 translate-y-0'
+          }`}>
+            Cinematic Wedding Photography & Films
+          </p>
         </div>
       </div>
 
-      {/* Content Overlay - Removed blur effect for better performance */}
-      <div 
-        ref={textRef}
-        className={`relative z-10 h-full flex flex-col items-center justify-center text-center px-4 transition-all duration-1000 ease-in-out ${
-          isTextVisible 
-            ? 'opacity-100' 
-            : 'opacity-0'
-        }`}
-      >
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 tracking-wider px-4">
-          THE WEDDING TALES
-        </h1>
-        <p className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-8 font-light tracking-wide px-4 max-w-4xl">
-          Cinematic Wedding Photography & Films
-        </p>
-        
-        <button className="group relative px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition-all duration-500 tracking-widest text-sm font-medium overflow-hidden">
-          <span className="relative z-10">EXPLORE PORTFOLIO</span>
-          <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
-        </button>
+      {/* Scroll Indicator - Editorial Style */}
+      <div className="absolute bottom-8 left-8 flex items-center space-x-3 text-white">
+        <div className="w-8 h-8 rounded-full border border-white flex items-center justify-center">
+          <ChevronDown size={16} />
+        </div>
+        <span className="text-sm tracking-widest">SCROLL</span>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-        <ChevronDown size={32} />
-      </div>
-
-      {/* Slide Indicators */}
-      <div className="absolute bottom-8 right-8 flex space-x-2">
+      {/* Slide Indicators - Minimalist */}
+      <div className="absolute bottom-8 right-8 flex space-x-3">
         {heroImages.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
+            className={`w-1 h-8 transition-all duration-500 ${
+              index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-30'
             }`}
           />
         ))}

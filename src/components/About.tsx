@@ -10,6 +10,7 @@ const About: React.FC = memo(() => {
     couples: 0,
     awards: 0
   });
+  const [isTextBlurred, setIsTextBlurred] = useState(true);
   const cardRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -20,7 +21,7 @@ const About: React.FC = memo(() => {
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     
-    const rotateX = (e.clientY - centerY) / 80; // Reduced sensitivity for smoother performance
+    const rotateX = (e.clientY - centerY) / 80;
     const rotateY = (centerX - e.clientX) / 80;
     
     setTilt({ x: rotateX, y: rotateY });
@@ -30,12 +31,9 @@ const About: React.FC = memo(() => {
     setTilt({ x: 0, y: 0 });
   }, []);
 
-  // Removed intersection observer for better performance
-
-  // Simplified number animation - start immediately
   useEffect(() => {
-    const duration = 2000; // 2 seconds
-    const steps = 60; // 60 steps for smooth animation
+    const duration = 2000;
+    const steps = 60;
     const stepDuration = duration / steps;
 
     stats.forEach((stat, index) => {
@@ -56,6 +54,29 @@ const About: React.FC = memo(() => {
         }
       }, stepDuration);
     });
+  }, []);
+
+  // Trigger text blur animation when section comes into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const timer = setTimeout(() => {
+              setIsTextBlurred(false);
+            }, 500);
+            return () => clearTimeout(timer);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   const stats = [
@@ -84,30 +105,39 @@ const About: React.FC = memo(() => {
   ];
 
   return (
-    <section ref={sectionRef} id="about" className="py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-600/5 rounded-full -translate-y-48 translate-x-48" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-600/10 rounded-full translate-y-32 -translate-x-32" />
-      
-      <div className="max-w-7xl mx-auto px-4 relative">
-        {/* Header */}
-        <div className="text-center mb-20">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            About <span className="text-yellow-600">The Wedding Tale</span>
+    <section ref={sectionRef} id="about" className="py-32 bg-black relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-8 relative">
+        {/* Editorial Header with Blur Animation */}
+        <div className="text-center mb-24">
+          <div className={`editorial-heading text-gray-400 mb-8 transition-all duration-1000 ease-out delay-200 ${
+            isTextBlurred ? 'blur-sm opacity-0 translate-y-4' : 'blur-none opacity-100 translate-y-0'
+          }`}>
+            AUTHENTIC, EVOCATIVE
+          </div>
+          <h2 className={`text-4xl lg:text-5xl xl:text-6xl font-display text-white mb-8 leading-none hero-text-blur ${
+            !isTextBlurred ? 'visible' : ''
+          }`}>
+            <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
+              REFINED STORYTELLING
+            </div>
+            <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
+              WITH AN EDITORIAL EDGE
+            </div>
           </h2>
-          <div className="w-20 h-1 bg-yellow-600 mx-auto mb-8" />
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className={`text-lg text-gray-300 max-w-4xl mx-auto leading-relaxed font-body transition-all duration-1000 ease-out delay-800 ${
+            isTextBlurred ? 'blur-sm opacity-0 translate-y-4' : 'blur-none opacity-100 translate-y-0'
+          }`}>
             We are storytellers who believe every love story deserves to be told with authenticity, 
             creativity, and timeless elegance.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center mb-12 lg:mb-20">
-          {/* Portrait Section */}
-          <div className="relative group perspective-1000">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-20">
+          {/* Portrait Section - Editorial Style */}
+          <div className="relative group">
             <div 
               ref={cardRef}
-              className="relative overflow-hidden rounded-2xl shadow-2xl transition-transform duration-700 hover:scale-105 tilt-container"
+              className="relative overflow-hidden transition-transform duration-700 hover:scale-105"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               style={{
@@ -116,52 +146,49 @@ const About: React.FC = memo(() => {
             >
               <Image 
                 src="/images/6S8A9608.jpg"
-                alt="Shri Portrait"
+                alt="Portrait"
                 width={800}
                 height={800}
-                className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] object-cover"
-                quality={75}
+                className="w-full h-[500px] sm:h-[600px] md:h-[700px] lg:h-[800px] object-cover"
+                quality={85}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
-            {/* Decorative Elements */}
-            <div className="absolute -top-6 -left-6 w-24 h-24 bg-yellow-600/20 rounded-full" />
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-yellow-600/10 rounded-full" />
           </div>
 
-          {/* Content Section */}
+          {/* Content Section - Editorial Style */}
           <div className="space-y-8">
             <div>
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-                Crafting <span className="text-yellow-600">Timeless</span><br />
+              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-display text-white mb-8 leading-tight font-light">
+                Crafting <span className="text-gray-400">Timeless</span><br />
                 Wedding Stories
               </h3>
               
-              <p className="text-lg text-gray-600 leading-relaxed mb-6">
+              <p className="text-lg text-gray-300 leading-relaxed mb-6 font-body">
                 With over 8 years of experience in wedding photography and videography, we specialize in 
                 creating cinematic narratives that capture not just moments, but the very essence of your love story.
               </p>
               
-              <p className="text-lg text-gray-600 leading-relaxed mb-8">
+              <p className="text-lg text-gray-300 leading-relaxed mb-8 font-body">
                 Every wedding is unique, and we approach each one with fresh eyes, creative vision, and 
                 an unwavering commitment to excellence. Our goal is to create memories that will be 
                 treasured for generations to come.
               </p>
             </div>
 
-            {/* Values Grid */}
-            <div className="grid grid-cols-1 gap-6">
+            {/* Values Grid - Editorial Style */}
+            <div className="grid grid-cols-1 gap-8">
               {values.map((value, index) => {
                 const IconComponent = value.icon;
                 return (
-                  <div key={index} className="flex items-start space-x-4 p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group">
-                    <div className="flex-shrink-0 w-12 h-12 bg-yellow-600/10 rounded-lg flex items-center justify-center group-hover:bg-yellow-600 transition-colors duration-300">
-                      <IconComponent className="text-yellow-600 group-hover:text-white transition-colors duration-300" size={24} />
+                  <div key={index} className="flex items-start space-x-6 p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-gray-700 transition-all duration-500 group">
+                    <div className="flex-shrink-0 w-14 h-14 bg-white/5 rounded-lg flex items-center justify-center group-hover:bg-white/10 transition-colors duration-300">
+                      <IconComponent className="text-white group-hover:text-gray-300 transition-colors duration-300" size={28} />
                     </div>
                     <div>
-                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{value.title}</h4>
-                      <p className="text-gray-600">{value.description}</p>
+                      <h4 className="text-xl font-display text-white mb-3 font-light">{value.title}</h4>
+                      <p className="text-gray-300 font-body">{value.description}</p>
                     </div>
                   </div>
                 );
@@ -170,8 +197,8 @@ const About: React.FC = memo(() => {
           </div>
         </div>
 
-        {/* Animated Stats Section */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Stats Section - Editorial Style */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
             const currentValue = index === 0 ? animatedNumbers.weddings : 
@@ -181,13 +208,13 @@ const About: React.FC = memo(() => {
             
             return (
               <div key={index} className="text-center group">
-                <div className="w-16 h-16 bg-yellow-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-600 transition-colors duration-300">
-                  <IconComponent className="text-yellow-600 group-hover:text-white transition-colors duration-300" size={32} />
+                <div className="w-20 h-20 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-white/10 transition-colors duration-300">
+                  <IconComponent className="text-white group-hover:text-gray-300 transition-colors duration-300" size={36} />
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-2">
+                <div className="text-4xl font-display text-white mb-3 font-light">
                   {currentValue}{stat.suffix}
                 </div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
+                <div className="text-gray-400 font-body tracking-widest text-sm uppercase">{stat.label}</div>
               </div>
             );
           })}

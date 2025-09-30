@@ -1,40 +1,91 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-raleway: 'Raleway', sans-serif;
+  --font-playfair: 'Playfair Display', serif;
+  --font-inter: 'Inter', sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
-  /* Optimize rendering */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: var(--font-raleway);
-  /* Performance optimizations */
+  font-family: var(--font-inter);
   text-rendering: optimizeSpeed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #000000;
+  color: #ffffff;
+  line-height: 1.6;
 }
 
-/* Ensure Raleway is applied to all text elements */
-* {
-  font-family: 'Raleway', sans-serif;
+/* Typography hierarchy */
+.font-display {
+  font-family: var(--font-playfair);
+}
+
+.font-body {
+  font-family: var(--font-inter);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 600;
+  font-family: var(--font-playfair);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  line-height: 1.1;
+  font-weight: 300;
+}
+
+h2 {
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1.2;
+  font-weight: 300;
+}
+
+h3 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.3;
+  font-weight: 400;
 }
 
 p, span, div, a, button, input, textarea, select {
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-inter);
+  font-weight: 300;
+}
+
+/* Editorial typography styles */
+.editorial-heading {
+  font-family: var(--font-playfair);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+}
+
+.editorial-large {
+  font-family: var(--font-playfair);
+  font-weight: 300;
+  font-size: clamp(3rem, 10vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+
+.editorial-subtitle {
+  font-family: var(--font-inter);
+  font-weight: 200;
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 /* 3D Tilt Effect - Optimized for performance */
@@ -71,6 +122,159 @@ p, span, div, a, button, input, textarea, select {
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
+}
+
+/* Editorial button styles */
+.editorial-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.editorial-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: white;
+  transition: left 0.5s ease;
+  z-index: 1;
+}
+
+.editorial-button:hover::before {
+  left: 0;
+}
+
+.editorial-button span {
+  position: relative;
+  z-index: 2;
+}
+
+/* Editorial image hover effects */
+.editorial-image {
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.editorial-image:hover {
+  transform: scale(1.05);
+}
+
+/* Custom scrollbar for horizontal galleries */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Editorial text animations */
+.editorial-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: editorialFadeIn 1s ease-out forwards;
+}
+
+@keyframes editorialFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero text blur-in animation */
+.hero-text-blur {
+  filter: blur(8px);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hero-text-blur.visible {
+  filter: blur(0px);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered text animation for multiple lines */
+.hero-text-line {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hero-text-line:nth-child(1) {
+  transition-delay: 0.2s;
+}
+
+.hero-text-line:nth-child(2) {
+  transition-delay: 0.4s;
+}
+
+.hero-text-line:nth-child(3) {
+  transition-delay: 0.6s;
+}
+
+.hero-text-line.visible {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0);
+}
+
+/* Sidebar animations */
+.sidebar-container {
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-nav-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: left 0.3s ease;
+  z-index: 1;
+}
+
+.sidebar-nav-item:hover::before {
+  left: 0;
+}
+
+.sidebar-nav-item span {
+  position: relative;
+  z-index: 2;
+}
+
+/* Sidebar divider animations */
+.sidebar-divider {
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-divider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.sidebar-divider:hover::before {
+  left: 100%;
 }
 
 /* Reduce motion for accessibility */

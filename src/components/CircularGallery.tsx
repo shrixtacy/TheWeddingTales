@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
 
 const CircularGallery: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -151,13 +152,21 @@ const CircularGallery: React.FC = () => {
             onMouseLeave={() => setHoveredCard(null)}
           >
             <div className={`${getCardSize(card.size)} rounded-2xl overflow-hidden shadow-2xl border-4 border-white/80 backdrop-blur-sm transition-all duration-500 hover:shadow-3xl`}>
-              <div 
-                className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-500 hover:scale-110"
-                style={{ 
-                  backgroundImage: `url(${card.image})`,
-                  filter: isHovered ? 'brightness(1.1) saturate(1.1)' : 'brightness(1) saturate(1)'
-                }}
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={card.image}
+                  alt={`Gallery photo ${index + 1}`}
+                  fill
+                  className="object-cover transition-transform duration-500 hover:scale-110"
+                  quality={60}
+                  loading="lazy"
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                  style={{ 
+                    filter: isHovered ? 'brightness(1.1) saturate(1.1)' : 'brightness(1) saturate(1)'
+                  }}
+                />
+              </div>
               
               {/* Overlay gradient on hover */}
               <div className={`absolute inset-0 bg-gradient-to-t from-black/20 to-transparent transition-opacity duration-300 ${
@@ -180,10 +189,18 @@ const CircularGallery: React.FC = () => {
       {/* Large Black Circle with Image */}
       <div className="relative w-[70vw] h-[70vw] max-w-[600px] max-h-[600px] rounded-full bg-black overflow-hidden shadow-2xl border-4 border-white/20">
         {/* Image inside the circle */}
-        <div 
-          className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-700 hover:scale-105"
-          style={{ backgroundImage: `url(${featuredImage})` }}
-        />
+        <div className="relative w-full h-full">
+          <Image
+            src={featuredImage}
+            alt="Featured gallery photo"
+            fill
+            className="object-cover transition-transform duration-700 hover:scale-105"
+            quality={70}
+            priority
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+          />
+        </div>
         
         {/* Cyan Button at bottom */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
