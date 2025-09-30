@@ -79,7 +79,7 @@ const GalleryPage: React.FC = () => {
       </section>
 
       {/* Gallery Section */}
-      <section className="py-20 px-4 bg-gray-50">
+      <section className="py-20 px-4 bg-gray-900">
         <div className="max-w-7xl mx-auto">
           {/* Category Filter */}
           <div className="flex flex-wrap justify-center gap-4 mb-12">
@@ -90,7 +90,7 @@ const GalleryPage: React.FC = () => {
                 className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
                   activeCategory === category
                     ? 'bg-yellow-600 text-white shadow-lg'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 shadow-md'
                 }`}
               >
                 {category}
@@ -121,8 +121,8 @@ const GalleryPage: React.FC = () => {
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
-                            <span className="text-gray-800 font-medium">{image.category}</span>
+                          <div className="bg-gray-800/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                            <span className="text-white font-medium">{image.category}</span>
                           </div>
                         </div>
                       </div>
@@ -133,7 +133,7 @@ const GalleryPage: React.FC = () => {
 
               {filteredImages.length === 0 && !loading && (
                 <div className="text-center py-12">
-                  <p className="text-gray-500 text-lg">No images found in this category.</p>
+                  <p className="text-gray-400 text-lg">No images found in this category.</p>
                 </div>
               )}
             </>

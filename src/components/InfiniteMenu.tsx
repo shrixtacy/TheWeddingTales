@@ -59,7 +59,7 @@ const InfiniteMenu: React.FC<InfiniteMenuProps> = ({ items = [] }) => {
   if (!items.length) return null;
 
   return (
-    <div className="relative w-full h-full bg-white overflow-hidden">
+    <div className="relative w-full h-full bg-gray-800 overflow-hidden">
       {/* Background Text */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-8xl font-bold text-gray-100 select-none pointer-events-none">
@@ -77,7 +77,7 @@ const InfiniteMenu: React.FC<InfiniteMenuProps> = ({ items = [] }) => {
             style={getCardStyle(index)}
             onClick={() => handleCardClick(index)}
           >
-            <div className="relative w-80 h-96 rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+            <div className="relative w-80 h-96 rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-600">
               {/* Card Image */}
               <div 
                 className="w-full h-full bg-cover bg-center bg-no-repeat"
@@ -94,8 +94,8 @@ const InfiniteMenu: React.FC<InfiniteMenuProps> = ({ items = [] }) => {
               </div>
               
               {/* Category Label */}
-              <div className="absolute top-4 left-4 bg-white bg-opacity-90 px-3 py-1 rounded-full">
-                <span className="text-sm font-semibold text-gray-800">Wed Filmer</span>
+              <div className="absolute top-4 left-4 bg-gray-800 bg-opacity-90 px-3 py-1 rounded-full">
+                <span className="text-sm font-semibold text-white">Wed Filmer</span>
               </div>
             </div>
           </div>

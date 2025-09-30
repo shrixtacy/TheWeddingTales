@@ -1,4 +1,11 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
+  "/about/page": "app/about/page.js",
+  "/api/analytics/track/route": "app/api/analytics/track/route.js",
+  "/gallery/page": "app/gallery/page.js",
+  "/api/cloudinary/delete/route": "app/api/cloudinary/delete/route.js",
   "/page": "app/page.js",
-  "/api/analytics/track/route": "app/api/analytics/track/route.js"
+  "/admin/page": "app/admin/page.js",
+  "/services/page": "app/services/page.js",
+  "/testimonials/page": "app/testimonials/page.js"
 }

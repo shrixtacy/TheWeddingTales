@@ -88,7 +88,7 @@ const Testimonials: React.FC = () => {
   };
 
   return (
-    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-white via-gray-50 to-gray-100 text-gray-900 relative overflow-hidden">
+    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-600/5 rounded-full -translate-y-48 translate-x-48" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-600/10 rounded-full translate-y-32 -translate-x-32" />
@@ -107,7 +107,7 @@ const Testimonials: React.FC = () => {
         </div>
 
         {/* Testimonial Carousel */}
-        <div className={`relative bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-lg p-4 sm:p-6 md:p-8 mb-8 sm:mb-12 transition-all duration-1500 ease-in-out delay-600 ${
+        <div className={`relative bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-700 shadow-lg p-4 sm:p-6 md:p-8 mb-8 sm:mb-12 transition-all duration-1500 ease-in-out delay-600 ${
           isVisible 
             ? 'opacity-100 blur-0 translate-y-0' 
             : 'opacity-0 blur-lg translate-y-8'
@@ -115,7 +115,7 @@ const Testimonials: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <button 
               onClick={prevTestimonial}
-              className="p-4 rounded-full bg-gray-100 hover:bg-yellow-600 hover:text-white transition-all duration-300 text-gray-600"
+              className="p-4 rounded-full bg-gray-700 hover:bg-yellow-600 hover:text-white transition-all duration-300 text-gray-300"
             >
               <ChevronLeft size={24} />
             </button>
@@ -126,7 +126,7 @@ const Testimonials: React.FC = () => {
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
                   className={`w-4 h-4 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial ? 'bg-yellow-600' : 'bg-gray-300'
+                    index === currentTestimonial ? 'bg-yellow-600' : 'bg-gray-600'
                   }`}
                 />
               ))}
@@ -134,7 +134,7 @@ const Testimonials: React.FC = () => {
             
             <button 
               onClick={nextTestimonial}
-              className="p-4 rounded-full bg-gray-100 hover:bg-yellow-600 hover:text-white transition-all duration-300 text-gray-600"
+              className="p-4 rounded-full bg-gray-700 hover:bg-yellow-600 hover:text-white transition-all duration-300 text-gray-300"
             >
               <ChevronRight size={24} />
             </button>
@@ -149,7 +149,7 @@ const Testimonials: React.FC = () => {
             </div>
 
             {/* Testimonial Text */}
-            <blockquote className="text-xl md:text-2xl text-gray-800 font-light leading-relaxed mb-6 italic max-w-3xl mx-auto">
+            <blockquote className="text-xl md:text-2xl text-gray-200 font-light leading-relaxed mb-6 italic max-w-3xl mx-auto">
               "{testimonials[currentTestimonial].testimonial}"
             </blockquote>
 
@@ -161,13 +161,13 @@ const Testimonials: React.FC = () => {
                 className="w-16 h-16 rounded-full object-cover border-3 border-yellow-600/30"
               />
               <div className="text-center md:text-left">
-                <h4 className="text-xl font-bold text-gray-900 mb-1">
+                <h4 className="text-xl font-bold text-white mb-1">
                   {testimonials[currentTestimonial].name}
                 </h4>
                 <p className="text-yellow-600 font-medium text-base mb-1">
                   {testimonials[currentTestimonial].wedding}
                 </p>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-400 text-sm">
                   {testimonials[currentTestimonial].location}
                 </p>
               </div>

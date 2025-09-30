@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="min-h-screen">
+      <body className="min-h-screen bg-black text-white">
         <ErrorBoundary>
           <LenisProvider>
             {children}

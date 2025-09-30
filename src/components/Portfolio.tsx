@@ -78,7 +78,7 @@ const Portfolio: React.FC = () => {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-br from-white to-gray-50 relative overflow-hidden">
+    <section className="py-24 bg-gradient-to-br from-gray-900 to-black relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-yellow-600/5 rounded-full -translate-x-36 -translate-y-36" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-yellow-600/10 rounded-full translate-x-48 translate-y-48" />
@@ -86,28 +86,28 @@ const Portfolio: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 relative">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-5xl font-bold text-white mb-6">
             Our <span className="text-yellow-600">Portfolio</span>
           </h2>
           <div className="w-20 h-1 bg-yellow-600 mx-auto mb-8" />
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             A curated collection of love stories, captured moments, and cinematic memories 
             that showcase our passion for wedding photography and videography.
           </p>
         </div>
 
         {/* Card Stack Menu */}
-        <div className="h-[500px] w-full bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className="h-[500px] w-full bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
           <InfiniteMenu items={portfolioItems} />
         </div>
 
         {/* CTA Section */}
         <div className="text-center mt-20">
-          <div className="bg-white rounded-2xl shadow-xl p-12 max-w-4xl mx-auto">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+          <div className="bg-gray-800 rounded-2xl shadow-xl p-12 max-w-4xl mx-auto">
+            <h3 className="text-3xl font-bold text-white mb-4">
               Ready to Create Your Story?
             </h3>
-            <p className="text-lg text-gray-600 mb-8">
+            <p className="text-lg text-gray-300 mb-8">
               Let's discuss your vision and create something beautiful together.
             </p>
             <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 hover:shadow-xl hover:-translate-y-1">

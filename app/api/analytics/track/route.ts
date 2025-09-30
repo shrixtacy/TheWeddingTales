@@ -3,10 +3,16 @@ import { supabase } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if request has body
+    // Check if request has body and is not empty
     const contentType = request.headers.get('content-type')
     if (!contentType || !contentType.includes('application/json')) {
       return NextResponse.json({ error: 'Invalid content type' }, { status: 400 })
+    }
+
+    // Read the raw body first to check if it's empty
+    const rawBody = await request.text()
+    if (!rawBody || rawBody.trim() === '') {
+      return NextResponse.json({ error: 'Empty request body' }, { status: 400 })
     }
 
     // Safely parse JSON with fallback
@@ -14,11 +20,13 @@ export async function POST(request: NextRequest) {
     let user_agent = 'unknown'
     
     try {
-      const body = await request.json()
+      const body = JSON.parse(rawBody)
       page = body.page || 'unknown'
       user_agent = body.user_agent || 'unknown'
     } catch (parseError) {
       console.warn('Failed to parse JSON, using defaults:', parseError)
+      // Return early to avoid database operations with invalid data
+      return NextResponse.json({ error: 'Invalid JSON format' }, { status: 400 })
     }
     
     // Get client IP

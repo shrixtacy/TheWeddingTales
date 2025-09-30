@@ -113,7 +113,7 @@ const Services: React.FC = () => {
           }
         `}
       </style>
-      <section ref={sectionRef} id="gallery" className="py-20 bg-white overflow-hidden">
+      <section ref={sectionRef} id="gallery" className="py-20 bg-black overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
           {/* Header */}
           <div className={`text-center mb-16 transition-all duration-1500 ease-in-out delay-300 ${
@@ -121,11 +121,11 @@ const Services: React.FC = () => {
               ? 'opacity-100 blur-0 translate-y-0' 
               : 'opacity-0 blur-lg translate-y-8'
           }`}>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 px-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 px-4">
               Our <span className="text-yellow-600">Gallery</span>
             </h2>
             <div className="w-12 sm:w-16 h-1 bg-yellow-600 mx-auto mb-6 sm:mb-8" />
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
+            <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto px-4">
               Capturing precious moments that tell your unique love story
             </p>
           </div>
