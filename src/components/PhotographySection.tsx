@@ -1,23 +1,15 @@
 'use client'
 
-import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, memo, useCallback, useMemo } from 'react';
 import Image from 'next/image';
+import { getRandomizedNonHeroImages } from '@/lib/imageUtils';
 
 const PhotographySection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   
-  const galleryImages = [
-    '/images/4a41f4753c333868e42cbb9b4a4799e9.jpg',
-    '/images/6S7A8566.jpg',
-    '/images/6S7A8837.jpg',
-    '/images/6S8A0060.jpg',
-    '/images/6S8A0849.jpg',
-    '/images/6S8A3066.jpg',
-    '/images/6S8A6703 (1).jpg',
-    '/images/6S8A7479.jpg',
-    '/images/6S8A7749.jpg'
-  ];
+  // Get randomized images excluding hero images
+  const galleryImages = useMemo(() => getRandomizedNonHeroImages(), []);
 
   const nextImage = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % galleryImages.length);
@@ -36,9 +28,9 @@ const PhotographySection: React.FC = memo(() => {
           <div className="editorial-heading text-gray-400 mb-8">
             DISCOVER OUR WORK
           </div>
-          <h2 className="editorial-large text-white mb-8 leading-none">
-            TIMELESS ROMANCE<br />
-            AT VILLA ERBA
+          <h2 className="text-6xl lg:text-7xl xl:text-8xl font-display text-white mb-8 leading-none">
+            TIMELESS MOMENTS<br />
+            CAPTURED & PRESERVED
           </h2>
         </div>
 
@@ -66,18 +58,21 @@ const PhotographySection: React.FC = memo(() => {
           {/* Content */}
           <div className="space-y-8">
             <div className="editorial-heading text-gray-400">
-              FEATURED IN VOGUE
+              OUR SIGNATURE STYLE
             </div>
             <h3 className="text-4xl lg:text-5xl font-display text-white font-light leading-tight">
-              JEWISH WEDDING<br />
-              AT VILLA MIANI
+              CINEMATIC STORYTELLING<br />
+              THROUGH OUR LENS
             </h3>
             <p className="text-lg text-gray-300 leading-relaxed font-body">
               A celebration of love and tradition, captured with editorial precision. 
               Every moment tells a story of heritage, joy, and the beginning of a new chapter.
             </p>
-            <button className="group relative px-8 py-4 border border-white text-white hover:bg-white hover:text-black transition-all duration-500 tracking-widest text-sm font-body overflow-hidden">
-              <span className="relative z-10">VIEW FULL STORY</span>
+            <button 
+              onClick={() => window.open('https://wa.me/919658404280?text=Hi, I\'m interested in your wedding photography services. Please share package details.', '_blank')}
+              className="group relative px-8 py-4 border border-white text-white hover:bg-white hover:text-black transition-all duration-500 tracking-widest text-sm font-body overflow-hidden"
+            >
+              <span className="relative z-10">INQUIRE</span>
               <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
             </button>
           </div>
@@ -141,12 +136,18 @@ const PhotographySection: React.FC = memo(() => {
             INDELIBLE
           </h3>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <button className="group relative px-12 py-4 border border-white text-white hover:bg-white hover:text-black transition-all duration-500 tracking-widest text-sm font-body overflow-hidden">
+            <button 
+              onClick={() => window.open('https://wa.me/919658404280?text=Hi, I\'m interested in your wedding photography services. Please share package details.', '_blank')}
+              className="group relative px-12 py-4 border border-white text-white hover:bg-white hover:text-black transition-all duration-500 tracking-widest text-sm font-body overflow-hidden"
+            >
               <span className="relative z-10">INQUIRE</span>
               <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
             </button>
-            <button className="group relative px-12 py-4 border border-white text-white hover:bg-white hover:text-black transition-all duration-500 tracking-widest text-sm font-body overflow-hidden">
-              <span className="relative z-10">VIEW PRICING</span>
+            <button 
+              onClick={() => window.location.href = '/gallery'}
+              className="group relative px-12 py-4 border border-white text-white hover:bg-white hover:text-black transition-all duration-500 tracking-widest text-sm font-body overflow-hidden"
+            >
+              <span className="relative z-10">VIEW GALLERY</span>
               <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
             </button>
           </div>

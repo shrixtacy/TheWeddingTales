@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, memo, useCallback } from 'react';
-import { Camera, Video, Award, Users, Heart, Star } from 'lucide-react';
+import { Camera, Video, Award, Users } from 'lucide-react';
 import Image from 'next/image';
 
 const About: React.FC = memo(() => {
@@ -11,8 +11,10 @@ const About: React.FC = memo(() => {
     awards: 0
   });
   const [isTextBlurred, setIsTextBlurred] = useState(true);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -31,30 +33,48 @@ const About: React.FC = memo(() => {
     setTilt({ x: 0, y: 0 });
   }, []);
 
+  // Animate numbers when stats section comes into view
   useEffect(() => {
-    const duration = 2000;
-    const steps = 60;
-    const stepDuration = duration / steps;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            
+            const duration = 2000;
+            const steps = 60;
+            const stepDuration = duration / steps;
 
-    stats.forEach((stat, index) => {
-      const increment = stat.number / steps;
-      let currentStep = 0;
+            stats.forEach((stat, index) => {
+              const increment = stat.number / steps;
+              let currentStep = 0;
 
-      const timer = setInterval(() => {
-        currentStep++;
-        const newValue = Math.min(Math.floor(increment * currentStep), stat.number);
-        
-        setAnimatedNumbers(prev => ({
-          ...prev,
-          [index === 0 ? 'weddings' : index === 1 ? 'hours' : index === 2 ? 'couples' : 'awards']: newValue
-        }));
+              const timer = setInterval(() => {
+                currentStep++;
+                const newValue = Math.min(Math.floor(increment * currentStep), stat.number);
+                
+                setAnimatedNumbers(prev => ({
+                  ...prev,
+                  [index === 0 ? 'weddings' : index === 1 ? 'hours' : index === 2 ? 'couples' : 'awards']: newValue
+                }));
 
-        if (currentStep >= steps) {
-          clearInterval(timer);
-        }
-      }, stepDuration);
-    });
-  }, []);
+                if (currentStep >= steps) {
+                  clearInterval(timer);
+                }
+              }, stepDuration);
+            });
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasAnimated]);
 
   // Trigger text blur animation when section comes into view
   useEffect(() => {
@@ -86,23 +106,6 @@ const About: React.FC = memo(() => {
     { icon: Award, number: 15, label: 'Awards Won', suffix: '+' }
   ];
 
-  const values = [
-    {
-      icon: Heart,
-      title: 'Passion-Driven',
-      description: 'Every project is approached with genuine passion and dedication to excellence.'
-    },
-    {
-      icon: Star,
-      title: 'Quality Focus',
-      description: 'Committed to delivering only the highest quality work that exceeds expectations.'
-    },
-    {
-      icon: Users,
-      title: 'Client-Centric',
-      description: 'Your vision and story are at the heart of everything we create together.'
-    }
-  ];
 
   return (
     <section ref={sectionRef} id="about" className="py-32 bg-black relative overflow-hidden">
@@ -166,39 +169,29 @@ const About: React.FC = memo(() => {
               </h3>
               
               <p className="text-lg text-gray-300 leading-relaxed mb-6 font-body">
-                With over 8 years of experience in wedding photography and videography, we specialize in 
-                creating cinematic narratives that capture not just moments, but the very essence of your love story.
+                Hi, I'm cheeku, a passionate photographer with a keen eye for detail and storytelling, 
+                through my lens, I aim to capture authentic emotions, timeless moments, and the beauty 
+                hidden in everyday life.
+              </p>
+              
+              <p className="text-lg text-gray-300 leading-relaxed mb-6 font-body">
+                My journey with photography began during my college days, and since then, I've explored 
+                various styles including [ portrait / lifestyle / wedding / travel / product / fashion ]. 
+                Each photograph I take reflects not just a scene — but a story, emotion, and perspective.
               </p>
               
               <p className="text-lg text-gray-300 leading-relaxed mb-8 font-body">
-                Every wedding is unique, and we approach each one with fresh eyes, creative vision, and 
-                an unwavering commitment to excellence. Our goal is to create memories that will be 
-                treasured for generations to come.
+                I believe that photography is more than just art — it's a way to preserve memories and 
+                express individuality. Whether I'm working on a client project or a personal shoot, my 
+                focus remains on creating meaningful, high quality visuals that connect with people.
               </p>
             </div>
 
-            {/* Values Grid - Editorial Style */}
-            <div className="grid grid-cols-1 gap-8">
-              {values.map((value, index) => {
-                const IconComponent = value.icon;
-                return (
-                  <div key={index} className="flex items-start space-x-6 p-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800 hover:border-gray-700 transition-all duration-500 group">
-                    <div className="flex-shrink-0 w-14 h-14 bg-white/5 rounded-lg flex items-center justify-center group-hover:bg-white/10 transition-colors duration-300">
-                      <IconComponent className="text-white group-hover:text-gray-300 transition-colors duration-300" size={28} />
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-display text-white mb-3 font-light">{value.title}</h4>
-                      <p className="text-gray-300 font-body">{value.description}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </div>
 
         {/* Stats Section - Editorial Style */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
+        <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-12">
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
             const currentValue = index === 0 ? animatedNumbers.weddings : 

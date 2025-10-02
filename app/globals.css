@@ -277,6 +277,63 @@ p, span, div, a, button, input, textarea, select {
   left: 100%;
 }
 
+/* Admin panel specific styles - Force override global styles */
+.admin-panel {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+}
+
+.admin-panel * {
+  color: #111827 !important;
+}
+
+.admin-panel h1,
+.admin-panel h2,
+.admin-panel h3,
+.admin-panel h4,
+.admin-panel h5,
+.admin-panel h6 {
+  color: #111827 !important;
+}
+
+.admin-panel p,
+.admin-panel span,
+.admin-panel div,
+.admin-panel label,
+.admin-panel .text-gray-900,
+.admin-panel .text-gray-600,
+.admin-panel .text-gray-700,
+.admin-panel .text-gray-500 {
+  color: #374151 !important;
+}
+
+.admin-panel input,
+.admin-panel textarea,
+.admin-panel select {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: #d1d5db !important;
+}
+
+.admin-panel button {
+  color: #ffffff !important;
+}
+
+/* Override any white text classes in admin */
+.admin-panel .text-white {
+  color: #111827 !important;
+}
+
+/* Force admin panel styling - most specific */
+body:has(.admin-panel) {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+}
+
+body:has(.admin-panel) * {
+  color: #111827 !important;
+}
+
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   * {

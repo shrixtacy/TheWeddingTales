@@ -5,9 +5,9 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-black text-white py-12">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8 mb-8">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="lg:col-span-1 space-y-4">
             <h3 className="text-xl sm:text-2xl font-bold tracking-wider">THE WEDDING TALES</h3>
             <p className="text-gray-400 leading-relaxed">
               Creating timeless wedding stories that resonate with love, emotion and authenticity.
@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
+          <div className="lg:col-span-1 space-y-4">
             <h4 className="text-lg font-semibold">Quick Links</h4>
             <div className="space-y-2">
               {['Portfolio', 'Services', 'About', 'Contact', 'Blog'].map((link, index) => (
@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Services */}
-          <div className="space-y-4">
+          <div className="lg:col-span-1 space-y-4">
             <h4 className="text-lg font-semibold">Services</h4>
             <div className="space-y-2">
               {['Wedding Photography', 'Wedding Films', 'Engagement Sessions', 'Elopement Packages', 'Drone Services'].map((service, index) => (
@@ -43,6 +43,37 @@ const Footer: React.FC = () => {
                   {service}
                 </a>
               ))}
+            </div>
+          </div>
+
+          {/* Google Maps - Square format on the right */}
+          <div className="lg:col-span-1">
+            <h4 className="text-lg font-semibold mb-4">Find Us</h4>
+            <div className="w-full h-64 bg-gray-800 rounded-lg overflow-hidden relative group cursor-pointer">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.1234567890!2d77.1234567890!3d28.1234567890!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDA3JzI0LjQiTiA3N8KwMDcnMjQuNCJF!5e0!3m2!1sen!2sin!4v1234567890"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="The Wedding Tales Location"
+                className="w-full h-full"
+              ></iframe>
+              
+              {/* Clickable overlay */}
+              <a
+                href="https://maps.app.goo.gl/Zt397BbYSaf6SqXX8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute inset-0 w-full h-full flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                aria-label="Open location in Google Maps"
+              >
+                <div className="bg-white/90 text-black px-4 py-2 rounded-lg font-semibold text-sm">
+                  Open in Maps
+                </div>
+              </a>
             </div>
           </div>
         </div>

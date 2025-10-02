@@ -17,7 +17,7 @@ const WhatsAppButton: React.FC = () => {
 
   const handleWhatsAppClick = () => {
     const phoneNumber = '919658404280'; // Remove + and spaces
-    const message = 'Hi! I\'m interested in your wedding photography services.';
+    const message = 'Hi, I\'m interested in your wedding photography services. Please share package details.';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     
     window.open(whatsappUrl, '_blank');
