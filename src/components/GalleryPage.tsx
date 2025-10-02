@@ -36,7 +36,10 @@ const GalleryPage: React.FC = () => {
         .order('uploaded_at', { ascending: false });
 
       if (error) throw error;
-      setGalleryImages(data || []);
+      
+      // Randomize the order of images
+      const shuffledImages = data ? [...data].sort(() => Math.random() - 0.5) : [];
+      setGalleryImages(shuffledImages);
     } catch (error) {
       console.error('Error fetching images:', error);
     } finally {

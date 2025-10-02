@@ -1,21 +1,25 @@
 'use client'
 
-import React, { useState, useRef, memo } from 'react';
+import React, { useState, useRef, memo, useMemo } from 'react';
 import Image from 'next/image';
+import { getRandomizedNonHeroImages } from '@/lib/imageUtils';
 
 const EditorialGallery: React.FC = memo(() => {
   const [currentLocation, setCurrentLocation] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Get randomized images excluding hero images
+  const randomizedImages = useMemo(() => getRandomizedNonHeroImages(), []);
+
   const locations = [
-    { name: 'Tuscany', image: '/images/6S8A9924.jpg' },
-    { name: 'Santorini', image: '/images/6S8A7477.jpg' },
-    { name: 'Paris', image: '/images/6S8A0861.jpg' },
-    { name: 'Amalfi Coast', image: '/images/3a334794a8235f5788ed5ecf9595bea3.jpg' },
-    { name: 'Lake Como', image: '/images/6S7A8566.jpg' },
-    { name: 'Provence', image: '/images/6S7A8837.jpg' },
-    { name: 'Swiss Alps', image: '/images/6S8A0060.jpg' },
-    { name: 'Venice', image: '/images/6S8A0849.jpg' }
+    { name: 'Tuscany', image: randomizedImages[0] || '/images/6S7A8566.jpg' },
+    { name: 'Santorini', image: randomizedImages[1] || '/images/6S7A8837.jpg' },
+    { name: 'Paris', image: randomizedImages[2] || '/images/6S8A0060.jpg' },
+    { name: 'Amalfi Coast', image: randomizedImages[3] || '/images/6S8A0849.jpg' },
+    { name: 'Lake Como', image: randomizedImages[4] || '/images/6S8A3066.jpg' },
+    { name: 'Provence', image: randomizedImages[5] || '/images/6S8A6703 (1).jpg' },
+    { name: 'Swiss Alps', image: randomizedImages[6] || '/images/6S8A7479.jpg' },
+    { name: 'Venice', image: randomizedImages[7] || '/images/6S8A7749.jpg' }
   ];
 
   const handleScroll = () => {

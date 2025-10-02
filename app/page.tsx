@@ -13,6 +13,7 @@ const PhotographySection = lazy(() => import('@/components/PhotographySection'))
 const EditorialGallery = lazy(() => import('@/components/EditorialGallery'))
 const PanoramicGallery = lazy(() => import('@/components/Immersive360Gallery'))
 const Services = lazy(() => import('@/components/Services'))
+const Values = lazy(() => import('@/components/Values'))
 const Testimonials = lazy(() => import('@/components/Testimonials'))
 const Contact = lazy(() => import('@/components/Contact'))
 const Footer = lazy(() => import('@/components/Footer'))
@@ -38,6 +39,9 @@ export default function HomePage() {
       </Suspense>
       <Suspense fallback={<LoadingSpinner />}>
         <Services />
+      </Suspense>
+      <Suspense fallback={<LoadingSpinner />}>
+        <Values />
       </Suspense>
       <Suspense fallback={<LoadingSpinner />}>
         <Testimonials />

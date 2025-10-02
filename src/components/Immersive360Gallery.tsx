@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, memo, useCallback, useMemo } from 'react';
 import { Play, Pause, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import Image from 'next/image';
+import { getRandomizedNonHeroImages } from '@/lib/imageUtils';
 
 const PanoramicGallery: React.FC = memo(() => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -12,22 +13,13 @@ const PanoramicGallery: React.FC = memo(() => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>();
 
-  // All your wedding photos for the panoramic gallery
-  const galleryImages = [
-    '/images/0F6A9741.jpg',
-    '/images/6S8A0861.jpg',
-    '/images/6S8A7477.jpg',
-    '/images/6S8A9608.jpg',
-    '/images/6S8A9924.jpg',
-    '/images/3a334794a8235f5788ed5ecf9595bea3.jpg',
-    // Duplicate images for seamless loop
-    '/images/0F6A9741.jpg',
-    '/images/6S8A0861.jpg',
-    '/images/6S8A7477.jpg',
-    '/images/6S8A9608.jpg',
-    '/images/6S8A9924.jpg',
-    '/images/3a334794a8235f5788ed5ecf9595bea3.jpg'
-  ];
+  // Get randomized images excluding hero images
+  const baseImages = useMemo(() => getRandomizedNonHeroImages(), []);
+  
+  // Create gallery with randomized images and duplicates for seamless loop
+  const galleryImages = useMemo(() => {
+    return [...baseImages, ...baseImages]; // Duplicate for seamless loop
+  }, [baseImages]);
 
   // Simplified auto-scroll functionality - always running
   useEffect(() => {
