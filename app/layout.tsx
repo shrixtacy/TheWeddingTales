@@ -4,6 +4,7 @@ import './globals.css'
 import LenisProvider from '@/components/LenisProvider'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import PerformanceMonitor from '@/components/PerformanceMonitor'
+import LoadingWrapper from '@/components/LoadingWrapper'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -38,10 +39,12 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen bg-black text-white">
         <ErrorBoundary>
-          <LenisProvider>
-            {children}
-            <PerformanceMonitor />
-          </LenisProvider>
+          <LoadingWrapper>
+            <LenisProvider>
+              {children}
+              <PerformanceMonitor />
+            </LenisProvider>
+          </LoadingWrapper>
         </ErrorBoundary>
       </body>
     </html>
