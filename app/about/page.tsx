@@ -151,24 +151,18 @@ const AboutPage = memo(() => {
         <div className="max-w-7xl mx-auto px-8 relative">
           {/* Editorial Header with Blur Animation */}
           <div className="text-center mb-24">
-            <div className={`editorial-heading text-gray-400 mb-8 transition-all duration-1000 ease-out delay-200 ${
-              isTextBlurred ? 'blur-sm opacity-0 translate-y-4' : 'blur-none opacity-100 translate-y-0'
-            }`}>
+            <div className="editorial-heading text-gray-400 mb-8">
               AUTHENTIC, EVOCATIVE
             </div>
-            <h1 className={`text-6xl lg:text-7xl xl:text-8xl font-display text-white mb-8 leading-none hero-text-blur ${
-              !isTextBlurred ? 'visible' : ''
-            }`}>
-              <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display text-white mb-8 leading-tight">
+              <div>
                 MEET THE ELEGANCE
               </div>
-              <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
+              <div>
                 BEHIND THE LENS
               </div>
             </h1>
-            <p className={`text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-body transition-all duration-1000 ease-out delay-800 ${
-              isTextBlurred ? 'blur-sm opacity-0 translate-y-4' : 'blur-none opacity-100 translate-y-0'
-            }`}>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-body">
               We are storytellers who believe every love story deserves to be told with authenticity, 
               creativity, and timeless elegance.
             </p>
