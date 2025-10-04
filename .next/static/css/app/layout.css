@@ -2306,9 +2306,9 @@ p, span, div, a, button, input, textarea, select {
 
 /* Hero text blur-in animation */
 .hero-text-blur {
-  filter: blur(8px);
-  opacity: 0;
-  transform: translateY(20px);
+  filter: blur(0px);
+  opacity: 1;
+  transform: translateY(0);
   transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -2320,9 +2320,9 @@ p, span, div, a, button, input, textarea, select {
 
 /* Staggered text animation for multiple lines */
 .hero-text-line {
-  opacity: 0;
-  filter: blur(10px);
-  transform: translateY(30px);
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0);
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 

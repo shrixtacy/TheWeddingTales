@@ -25,7 +25,7 @@
     "id": "app\\page.tsx -> @/components/Footer",
     "files": [
       "static/chunks/vendors.js",
-      "static/chunks/common.js"
+      "static/chunks/_app-pages-browser_src_components_Footer_tsx.js"
     ]
   },
   "app\\page.tsx -> @/components/Immersive360Gallery": {
