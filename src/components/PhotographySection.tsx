@@ -96,7 +96,7 @@ const PhotographySection: React.FC = memo(() => {
         {/* Meet the Team Section */}
         <div className="mt-32 text-center">
           <div className="editorial-heading text-gray-400 mb-8">
-            MEET T&W
+            MEET THE ELEGANCE
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
             <div className="relative group">

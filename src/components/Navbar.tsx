@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 const Navbar: React.FC = () => {
@@ -39,11 +40,11 @@ const Navbar: React.FC = () => {
   }, [isSidebarOpen]);
 
   const navItems = [
-    { name: 'ABOUT', href: '#about' },
-    { name: 'FILM', href: '/gallery' },
+    { name: 'HOME', href: '/' },
+    { name: 'ABOUT', href: '/about' },
     { name: 'GALLERY', href: '/gallery' },
     { name: 'SERVICES', href: '#services' },
-    { name: 'CONTACT', href: '#contact' },
+    { name: 'CONTACT', href: '/contact' },
   ];
 
   const handleNavClick = () => {
@@ -59,9 +60,14 @@ const Navbar: React.FC = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo - Editorial Style */}
             <div className="flex-shrink-0 flex items-center">
-              <div className="font-display text-white text-xl tracking-widest">
-                The Wedding Tale
-              </div>
+              <Image
+                src="/images/White Minimalist Profile LinkedIn Banner.png"
+                alt="The Wedding Tales"
+                width={250}
+                height={75}
+                className="h-14 w-auto object-contain"
+                priority
+              />
             </div>
 
             {/* Desktop Navigation - Editorial Style */}
@@ -114,9 +120,14 @@ const Navbar: React.FC = () => {
       }`}>
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 sm:p-8 border-b border-gray-800">
-          <div className="font-display text-white text-lg sm:text-xl tracking-widest">
-            The Wedding Tale
-          </div>
+          <Image
+            src="/images/White Minimalist Profile LinkedIn Banner.png"
+            alt="The Wedding Tales"
+            width={180}
+            height={54}
+            className="h-10 sm:h-12 w-auto object-contain"
+            priority
+          />
           <button
             onClick={() => setIsSidebarOpen(false)}
             className="text-white hover:text-gray-300 p-2 transition-colors duration-300"
