@@ -24,7 +24,7 @@ export default function GoogleDriveTest() {
       
     } catch (error) {
       console.error('Test failed:', error)
-      setTestResults({ error: error.message })
+      setTestResults({ error: error instanceof Error ? error.message : 'An unknown error occurred' })
     } finally {
       setLoading(false)
     }
