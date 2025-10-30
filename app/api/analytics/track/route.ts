@@ -3,6 +3,15 @@ import { supabase } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Supabase is configured
+    if (!supabase) {
+      console.log('Supabase not configured, skipping analytics tracking')
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Analytics tracking skipped - Supabase not configured' 
+      })
+    }
+
     const body = await request.json()
     const { page, user_agent } = body
 

@@ -46,6 +46,25 @@ export default function Analytics() {
 
   const fetchAnalytics = async () => {
     try {
+      // Check if Supabase is available
+      if (!supabase) {
+        console.warn('Supabase not configured, using fallback analytics data')
+        setIsOffline(true)
+        
+        // Use fallback/demo data
+        const fallbackAnalytics = {
+          totalVisits: 0,
+          uniqueVisitors: 0,
+          pageViews: [],
+          recentVisits: [],
+          galleryViews: 0,
+          totalImages: 0,
+        }
+        
+        setAnalytics(fallbackAnalytics)
+        return
+      }
+
       // Get total visits
       const { data: visits, error: visitsError } = await supabase
         .from('website_visits')
@@ -161,6 +180,11 @@ export default function Analytics() {
 
   const trackPageView = async (page: string) => {
     try {
+      if (!supabase) {
+        console.log('Supabase not configured, skipping page view tracking')
+        return
+      }
+
       await supabase
         .from('website_visits')
         .insert([
@@ -202,6 +226,11 @@ export default function Analytics() {
       
       if (failedVisits.length === 0) {
         alert('No offline data to sync')
+        return
+      }
+
+      if (!supabase) {
+        alert('Supabase not configured, cannot sync offline data')
         return
       }
 
