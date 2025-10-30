@@ -11,7 +11,7 @@ import LoadingSpinner from '@/components/LoadingSpinner'
 const About = lazy(() => import('@/components/About'))
 const PhotographySection = lazy(() => import('@/components/PhotographySection'))
 const EditorialGallery = lazy(() => import('@/components/EditorialGallery'))
-const PanoramicGallery = lazy(() => import('@/components/Immersive360Gallery'))
+
 const Services = lazy(() => import('@/components/Services'))
 const Values = lazy(() => import('@/components/Values'))
 const Testimonials = lazy(() => import('@/components/Testimonials'))
@@ -34,9 +34,7 @@ export default function HomePage() {
       <Suspense fallback={<LoadingSpinner />}>
         <EditorialGallery />
       </Suspense>
-      <Suspense fallback={<LoadingSpinner />}>
-        <PanoramicGallery />
-      </Suspense>
+
       <Suspense fallback={<LoadingSpinner />}>
         <Services />
       </Suspense>

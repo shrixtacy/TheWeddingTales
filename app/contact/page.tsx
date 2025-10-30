@@ -75,21 +75,28 @@ const ContactPage = memo(() => {
     setIsSubmitting(true);
     
     // Create WhatsApp message
-    const message = `Hi! I'm interested in your wedding photography services.
+    const message = `🎉 *Wedding Photography Inquiry* 🎉
 
-Name: ${formData.name}
-Email: ${formData.email}
-Phone: ${formData.phone}
-Event Date: ${formData.eventDate}
+Hi! I'm interested in your wedding photography services.
 
-Message: ${formData.message}
+📝 *Contact Details:*
+👤 Name: ${formData.name}
+📧 Email: ${formData.email}
+📱 Phone: ${formData.phone || 'Not provided'}
+📅 Event Date: ${formData.eventDate || 'To be discussed'}
 
-Please share your package details.`;
+💬 *Message:*
+${formData.message}
+
+Please share your package details and availability. Looking forward to hearing from you! ✨`;
 
     // Open WhatsApp with pre-filled message
     window.open(`https://wa.me/919658404280?text=${encodeURIComponent(message)}`, '_blank');
     
-    setIsSubmitting(false);
+    // Show success message
+    alert('Thank you! Your message has been sent via WhatsApp. We\'ll get back to you soon.');
+    
+    // Reset form
     setFormData({
       name: '',
       email: '',
@@ -97,31 +104,27 @@ Please share your package details.`;
       eventDate: '',
       message: ''
     });
+    
+    setIsSubmitting(false);
   };
 
   const contactInfo = [
     {
       icon: Phone,
       title: "Phone",
-      details: ["+91 9658404280", "+91 9876543210"],
+      details: ["+91 96584 04280"],
       action: "tel:+919658404280"
     },
     {
       icon: Mail,
       title: "Email", 
-      details: ["hello@theweddingtales.com", "bookings@theweddingtales.com"],
-      action: "mailto:hello@theweddingtales.com"
+      details: ["twtfilms2025@gmail.com"],
+      action: "mailto:twtfilms2025@gmail.com"
     },
     {
       icon: MapPin,
       title: "Location",
-      details: ["New Delhi, India", "Available Worldwide"],
-      action: "#"
-    },
-    {
-      icon: Clock,
-      title: "Hours",
-      details: ["Mon - Sat: 9AM - 7PM", "Sunday: By Appointment"],
+      details: ["Gandhi Nagar, Brahmapur"],
       action: "#"
     }
   ];

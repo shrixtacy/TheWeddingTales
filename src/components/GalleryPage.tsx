@@ -30,6 +30,19 @@ const GalleryPage: React.FC = () => {
 
   const fetchImages = async () => {
     try {
+      // Check if supabase is available
+      if (!supabase || !supabase.from) {
+        console.warn('Supabase client not available, using fallback images');
+        // Use fallback images from public folder
+        const fallbackImages = [
+          { id: '1', title: 'Wedding Moment', description: 'Beautiful wedding ceremony', category: 'Wedding', cloudinary_url: '/images/6S8A9924.jpg', public_id: 'fallback1', uploaded_at: new Date().toISOString() },
+          { id: '2', title: 'Couple Portrait', description: 'Romantic couple portrait', category: 'Portrait', cloudinary_url: '/images/6S8A7477.jpg', public_id: 'fallback2', uploaded_at: new Date().toISOString() },
+          { id: '3', title: 'Ceremony', description: 'Wedding ceremony moments', category: 'Wedding', cloudinary_url: '/images/6S8A0861.jpg', public_id: 'fallback3', uploaded_at: new Date().toISOString() },
+        ];
+        setGalleryImages(fallbackImages);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('gallery_images')
         .select('*')
@@ -42,6 +55,13 @@ const GalleryPage: React.FC = () => {
       setGalleryImages(shuffledImages);
     } catch (error) {
       console.error('Error fetching images:', error);
+      // Use fallback images on error
+      const fallbackImages = [
+        { id: '1', title: 'Wedding Moment', description: 'Beautiful wedding ceremony', category: 'Wedding', cloudinary_url: '/images/6S8A9924.jpg', public_id: 'fallback1', uploaded_at: new Date().toISOString() },
+        { id: '2', title: 'Couple Portrait', description: 'Romantic couple portrait', category: 'Portrait', cloudinary_url: '/images/6S8A7477.jpg', public_id: 'fallback2', uploaded_at: new Date().toISOString() },
+        { id: '3', title: 'Ceremony', description: 'Wedding ceremony moments', category: 'Wedding', cloudinary_url: '/images/6S8A0861.jpg', public_id: 'fallback3', uploaded_at: new Date().toISOString() },
+      ];
+      setGalleryImages(fallbackImages);
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,4 @@
-// File: D:\The Wedding Tales\work\TheWeddingTales\app\api\analytics\track\route.ts
+// File: D:\The Wedding Tales\Amazing\TheWeddingTales\app\api\analytics\track\route.ts
 import * as entry from '../../../../../../app/api/analytics/track/route.js'
 import type { NextRequest } from 'next/server.js'
 

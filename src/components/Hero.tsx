@@ -7,13 +7,13 @@ const Hero: React.FC = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTextVisible, setIsTextVisible] = useState(false);
   const [isTextBlurred, setIsTextBlurred] = useState(true);
+  const [isMobileTextFaded, setIsMobileTextFaded] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
   
   const heroImages = [
-    '/images/6S8A9924.jpg',
-    '/images/6S8A7477.jpg',
-    '/images/6S8A0861.jpg',
-    '/images/3a334794a8235f5788ed5ecf9595bea3.jpg'
+    'https://images.unsplash.com/photo-1761812295717-dd5ad51d1bc6?auto=format&fit=crop&w=1400&q=80',
+    'https://images.unsplash.com/photo-1761812295744-c996c7612b13?auto=format&fit=crop&w=1400&q=80',
+    'https://images.unsplash.com/photo-1761812295884-7879222b3241?auto=format&fit=crop&w=1400&q=80'
   ];
 
   // Optimized slide transition with useCallback
@@ -42,6 +42,46 @@ const Hero: React.FC = memo(() => {
     };
   }, []);
 
+  // Mobile fade-out effect for hero text
+  useEffect(() => {
+    let fadeTimer: NodeJS.Timeout;
+    
+    const checkMobileAndFade = () => {
+      const isMobile = window.innerWidth < 768; // md breakpoint
+      if (isMobile) {
+        // Fade out text after 7 seconds on mobile
+        fadeTimer = setTimeout(() => {
+          setIsMobileTextFaded(true);
+        }, 7000);
+      } else {
+        setIsMobileTextFaded(false);
+      }
+    };
+
+    checkMobileAndFade();
+    
+    // Listen for resize events to handle orientation changes
+    const handleResize = () => {
+      clearTimeout(fadeTimer);
+      const isMobile = window.innerWidth < 768;
+      if (!isMobile) {
+        setIsMobileTextFaded(false);
+      } else {
+        // Reset and restart fade timer on mobile
+        setIsMobileTextFaded(false);
+        fadeTimer = setTimeout(() => {
+          setIsMobileTextFaded(true);
+        }, 7000);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(fadeTimer);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <section id="home" className="relative h-screen overflow-hidden">
       {/* Full-screen background with dramatic overlay */}
@@ -67,25 +107,24 @@ const Hero: React.FC = memo(() => {
       {/* Main Content - Editorial Style */}
       <div 
         ref={textRef}
-        className={`relative z-10 h-full flex flex-col justify-center px-8 transition-all duration-1500 ease-out ${
+        className={`relative z-10 h-full flex flex-col justify-start md:justify-center pt-28 md:pt-0 px-8 transition-all duration-1500 ease-out ${
           isTextVisible 
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-8'
         }`}
       >
         {/* Large Editorial Text with Blur Animation */}
-        <div className="max-w-4xl">
-          <h1 className={`editorial-large text-white mb-8 leading-none hero-text-blur ${
+        <div className={`max-w-4xl transition-opacity duration-1000 ${
+          isMobileTextFaded ? 'md:opacity-100 opacity-0' : 'opacity-100'
+        }`}>
+          <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight hero-text-blur ${
             !isTextBlurred ? 'visible' : ''
           }`}>
             <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
-              INSATIABLE
+              Experience the Art of
             </div>
             <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
-              IMPACTFUL &
-            </div>
-            <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
-              INTENTIONAL
+              Luxury Wedding Photography
             </div>
           </h1>
           

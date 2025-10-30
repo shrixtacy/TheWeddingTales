@@ -24,11 +24,25 @@ interface AnalyticsData {
 export default function Analytics() {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isOffline, setIsOffline] = useState(false)
   const [timeRange, setTimeRange] = useState('7d')
 
   useEffect(() => {
     fetchAnalytics()
   }, [timeRange])
+
+  // Load cached data on component mount
+  useEffect(() => {
+    const cachedData = localStorage.getItem('analytics_cache')
+    if (cachedData) {
+      try {
+        const parsedData = JSON.parse(cachedData)
+        setAnalytics(parsedData)
+      } catch (error) {
+        console.error('Error parsing cached analytics:', error)
+      }
+    }
+  }, [])
 
   const fetchAnalytics = async () => {
     try {
@@ -63,23 +77,83 @@ export default function Analytics() {
 
       if (galleryError) console.error('Gallery views error:', galleryError)
 
-      // Get total images
+      // Get total images from existing gallery_images table
       const { data: images, error: imagesError } = await supabase
         .from('gallery_images')
         .select('id')
 
       if (imagesError) console.error('Images error:', imagesError)
 
-      setAnalytics({
+      const analyticsData = {
         totalVisits: visits?.length || 0,
         uniqueVisitors: uniqueIPs.size,
         pageViews: pageViewsArray,
         recentVisits,
         galleryViews: galleryViews?.length || 0,
         totalImages: images?.length || 0,
-      })
+      }
+
+      setAnalytics(analyticsData)
+      setIsOffline(false)
+      
+      // Cache the data for offline use
+      localStorage.setItem('analytics_cache', JSON.stringify(analyticsData))
+      localStorage.setItem('analytics_cache_timestamp', new Date().toISOString())
+      
     } catch (error) {
       console.error('Error fetching analytics:', error)
+      setIsOffline(true)
+      
+      // Try to load cached data as fallback
+      const cachedData = localStorage.getItem('analytics_cache')
+      if (cachedData) {
+        try {
+          const parsedData = JSON.parse(cachedData)
+          setAnalytics(parsedData)
+        } catch (parseError) {
+          console.error('Error parsing cached analytics:', parseError)
+        }
+      } else {
+        // If no cached data, try to generate analytics from offline data
+        try {
+          const offlineData = localStorage.getItem('offline_analytics')
+          if (offlineData) {
+            const offlineVisits = JSON.parse(offlineData)
+            const uniqueIPs = new Set(offlineVisits.map((v: any) => v.ip_address || 'unknown'))
+            
+            const pageViews = offlineVisits.reduce((acc: any, visit: any) => {
+              acc[visit.page] = (acc[visit.page] || 0) + 1
+              return acc
+            }, {})
+
+            const pageViewsArray = Object.entries(pageViews).map(([page, views]) => ({
+              page,
+              views: views as number
+            }))
+
+            const recentVisits = offlineVisits.slice(0, 10).map((visit: any, index: number) => ({
+              id: `offline-${index}`,
+              page: visit.page,
+              timestamp: visit.timestamp,
+              user_agent: visit.user_agent || 'unknown',
+              ip_address: visit.ip_address || 'unknown'
+            }))
+
+            const offlineAnalytics = {
+              totalVisits: offlineVisits.length,
+              uniqueVisitors: uniqueIPs.size,
+              pageViews: pageViewsArray,
+              recentVisits,
+              galleryViews: 0, // Offline data doesn't have gallery views
+              totalImages: 0,  // Offline data doesn't have image count
+            }
+
+            setAnalytics(offlineAnalytics)
+          }
+        } catch (offlineError) {
+          console.error('Error processing offline analytics:', offlineError)
+        }
+      }
     } finally {
       setLoading(false)
     }
@@ -110,11 +184,95 @@ export default function Analytics() {
     )
   }
 
+  const getCacheTimestamp = () => {
+    const timestamp = localStorage.getItem('analytics_cache_timestamp')
+    if (timestamp) {
+      return new Date(timestamp).toLocaleString()
+    }
+    return null
+  }
+
+  const syncOfflineData = async () => {
+    try {
+      const offlineData = localStorage.getItem('offline_analytics')
+      if (!offlineData) return
+
+      const offlineVisits = JSON.parse(offlineData)
+      const failedVisits = offlineVisits.filter((visit: any) => visit.failed)
+      
+      if (failedVisits.length === 0) {
+        alert('No offline data to sync')
+        return
+      }
+
+      // Try to sync failed visits to Supabase
+      for (const visit of failedVisits) {
+        try {
+          await supabase
+            .from('website_visits')
+            .insert([
+              {
+                page: visit.page,
+                timestamp: visit.timestamp,
+                user_agent: visit.user_agent,
+                ip_address: visit.ip_address || 'unknown',
+              },
+            ])
+        } catch (error) {
+          console.error('Error syncing visit:', error)
+        }
+      }
+
+      // Remove synced data from offline storage
+      const remainingVisits = offlineVisits.filter((visit: any) => !visit.failed)
+      localStorage.setItem('offline_analytics', JSON.stringify(remainingVisits))
+
+      alert(`Synced ${failedVisits.length} offline visits`)
+      
+      // Refresh analytics
+      await fetchAnalytics()
+    } catch (error) {
+      console.error('Error syncing offline data:', error)
+      alert('Error syncing offline data')
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Website Analytics</h2>
-        <p className="text-gray-600">Monitor your website's performance and visitor engagement.</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Website Analytics</h2>
+            <p className="text-gray-600">Monitor your website's performance and visitor engagement.</p>
+          </div>
+          {isOffline && (
+            <div className="flex items-center space-x-2 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2">
+              <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+              <span className="text-sm text-yellow-800">Offline Mode</span>
+            </div>
+          )}
+        </div>
+        {isOffline && getCacheTimestamp() && (
+          <div className="mt-2 flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              Showing cached data from: {getCacheTimestamp()}
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={fetchAnalytics}
+                className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={syncOfflineData}
+                className="text-sm text-green-600 hover:text-green-800 font-medium"
+              >
+                Sync Offline Data
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -172,7 +330,7 @@ export default function Analytics() {
             <div className="flex-shrink-0">
               <div className="w-8 h-8 bg-purple-100 rounded-md flex items-center justify-center">
                 <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012 2v2M7 7h10" />
                 </svg>
               </div>
             </div>

@@ -181,7 +181,7 @@ const AboutPage = memo(() => {
                 }}
               >
                 <Image 
-                  src="/images/6S8A9608.jpg"
+                  src="/About-us/Picsart_23-01-01_19-21-08-002.jpg"
                   alt="Portrait"
                   width={800}
                   height={800}
@@ -310,38 +310,21 @@ const AboutPage = memo(() => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-            <div className="relative group">
-              <div className="aspect-[4/5] relative overflow-hidden">
+          <div className="flex justify-center">
+            <div className="relative group w-80">
+              <div className="relative h-96 overflow-hidden rounded-lg">
                 <Image
-                  src="/images/6S8A9608.jpg"
-                  alt="Team member"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  src="/About-us/Picsart_23-01-01_19-21-08-002.jpg"
+                  alt="Cheeku - Lead Photographer"
+                  width={320}
+                  height={384}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   quality={85}
-                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <div className="absolute bottom-8 left-8 right-8">
                   <h3 className="text-2xl font-display text-white mb-2">Cheeku</h3>
                   <p className="text-gray-300 font-body">Lead Photographer & Creative Director</p>
-                </div>
-              </div>
-            </div>
-            <div className="relative group">
-              <div className="aspect-[4/5] relative overflow-hidden">
-                <Image
-                  src="/images/6S8A7477.jpg"
-                  alt="Team member"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  quality={85}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8">
-                  <h3 className="text-2xl font-display text-white mb-2">The Team</h3>
-                  <p className="text-gray-300 font-body">Dedicated Professionals</p>
                 </div>
               </div>
             </div>

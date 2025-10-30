@@ -9,7 +9,6 @@
   "app\\page.tsx -> @/components/Contact": {
     "id": "app\\page.tsx -> @/components/Contact",
     "files": [
-      "static/chunks/vendors.js",
       "static/chunks/_app-pages-browser_src_components_Contact_tsx.js"
     ]
   },
@@ -25,15 +24,7 @@
     "id": "app\\page.tsx -> @/components/Footer",
     "files": [
       "static/chunks/vendors.js",
-      "static/chunks/_app-pages-browser_src_components_Footer_tsx.js"
-    ]
-  },
-  "app\\page.tsx -> @/components/Immersive360Gallery": {
-    "id": "app\\page.tsx -> @/components/Immersive360Gallery",
-    "files": [
-      "static/chunks/vendors.js",
-      "static/chunks/common.js",
-      "static/chunks/_app-pages-browser_src_components_Immersive360Gallery_tsx.js"
+      "static/chunks/common.js"
     ]
   },
   "app\\page.tsx -> @/components/PhotographySection": {

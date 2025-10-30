@@ -12,14 +12,14 @@ const EditorialGallery: React.FC = memo(() => {
   const randomizedImages = useMemo(() => getRandomizedNonHeroImages(), []);
 
   const locations = [
-    { name: 'Tuscany', image: randomizedImages[0] || '/images/6S7A8566.jpg' },
-    { name: 'Santorini', image: randomizedImages[1] || '/images/6S7A8837.jpg' },
-    { name: 'Paris', image: randomizedImages[2] || '/images/6S8A0060.jpg' },
-    { name: 'Amalfi Coast', image: randomizedImages[3] || '/images/6S8A0849.jpg' },
-    { name: 'Lake Como', image: randomizedImages[4] || '/images/6S8A3066.jpg' },
-    { name: 'Provence', image: randomizedImages[5] || '/images/6S8A6703 (1).jpg' },
-    { name: 'Swiss Alps', image: randomizedImages[6] || '/images/6S8A7479.jpg' },
-    { name: 'Venice', image: randomizedImages[7] || '/images/6S8A7749.jpg' }
+    { name: 'Bhubaneswar', image: randomizedImages[0] || '/images/6S7A8566.jpg' },
+    { name: 'Puri', image: randomizedImages[1] || '/images/6S7A8837.jpg' },
+    { name: 'Berhampur', image: randomizedImages[2] || '/images/6S8A0060.jpg' },
+    { name: 'Hyderabad', image: randomizedImages[3] || '/images/6S8A0849.jpg' },
+    { name: 'Jaipur', image: randomizedImages[4] || '/images/6S8A3066.jpg' },
+    { name: 'Mumbai', image: randomizedImages[5] || '/images/6S8A6703 (1).jpg' },
+    { name: 'Cuttack', image: randomizedImages[6] || '/images/6S8A7479.jpg' },
+    { name: 'Konark', image: randomizedImages[7] || '/images/6S8A7749.jpg' }
   ];
 
   const handleScroll = () => {
@@ -37,17 +37,17 @@ const EditorialGallery: React.FC = memo(() => {
         {/* Editorial Header */}
         <div className="text-center mb-20">
           <div className="editorial-heading text-gray-400 mb-8">
-            PASSPORT TO PHOTOGRAPHY
+            CAPTURING LOVE ACROSS INDIA
           </div>
           <h2 className="editorial-large text-white mb-8 leading-none">
             DESTINATIONS<br />
-            AROUND THE WORLD
+            ACROSS INDIA
           </h2>
         </div>
 
         {/* Horizontal Scrolling Gallery */}
         <div className="relative">
-          <div 
+          <div
             ref={scrollRef}
             className="flex space-x-8 overflow-x-auto scrollbar-hide pb-8"
             onScroll={handleScroll}
@@ -92,9 +92,8 @@ const EditorialGallery: React.FC = memo(() => {
                     });
                   }
                 }}
-                className={`w-2 h-8 transition-all duration-300 ${
-                  index === currentLocation ? 'bg-white' : 'bg-white/30'
-                }`}
+                className={`w-2 h-8 transition-all duration-300 ${index === currentLocation ? 'bg-white' : 'bg-white/30'
+                  }`}
               />
             ))}
           </div>
@@ -106,12 +105,12 @@ const EditorialGallery: React.FC = memo(() => {
             <h3 className="text-3xl lg:text-4xl font-display text-white font-light leading-tight mb-8">
               Every destination tells a story.<br />
               We capture the essence of your love<br />
-              against the world's most beautiful backdrops.
+              against India's most beautiful backdrops.
             </h3>
             <p className="text-lg text-gray-300 leading-relaxed font-body">
-              From the rolling hills of Tuscany to the dramatic cliffs of Santorini, 
-              we travel the world to document your most precious moments in the most 
-              breathtaking locations.
+              From the sacred temples of Puri to the royal palaces of Jaipur,
+              we travel across India to document your most precious moments in the most
+              culturally rich and breathtaking locations.
             </p>
           </div>
         </div>

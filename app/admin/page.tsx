@@ -1,15 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
-import ImageUpload from '@/components/admin/ImageUpload'
 import Analytics from '@/components/admin/Analytics'
-import GalleryManagement from '@/components/admin/GalleryManagement'
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
-  const [activeTab, setActiveTab] = useState('upload')
+  const [activeTab, setActiveTab] = useState('analytics')
 
   useEffect(() => {
     // Check if already authenticated
@@ -51,7 +48,8 @@ export default function AdminPage() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 placeholder-gray-500"
+                placeholder="Enter admin password"
                 required
               />
             </div>
@@ -88,9 +86,7 @@ export default function AdminPage() {
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8 px-6">
               {[
-                { id: 'upload', name: 'Upload Images' },
-                { id: 'gallery', name: 'Manage Gallery' },
-                { id: 'analytics', name: 'Analytics' },
+                { id: 'analytics', name: 'Analytics Dashboard' },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -108,8 +104,6 @@ export default function AdminPage() {
           </div>
 
           <div className="p-6">
-            {activeTab === 'upload' && <ImageUpload />}
-            {activeTab === 'gallery' && <GalleryManagement />}
             {activeTab === 'analytics' && <Analytics />}
           </div>
         </div>
