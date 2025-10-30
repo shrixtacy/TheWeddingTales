@@ -91,34 +91,48 @@ const ProxyGoogleDriveGallery: React.FC = () => {
       <section className="py-20 px-4 bg-gray-900">
         <div className="max-w-7xl mx-auto">
            {/* Status Bar */}
-           <div className="mb-8 p-4 bg-gray-800 rounded-lg border border-gray-700">
-             <div className="flex items-center justify-between">
-               <div className="flex items-center space-x-4">
+           <div className="mb-8 p-4 sm:p-6 bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-700/50">
+             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+               {/* Status Info */}
+               <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
                  <div className="flex items-center space-x-2">
                    {isGoogleDriveConnected ? (
                      <>
-                       <CheckCircle className="w-5 h-5 text-green-500" />
-                       <span className="text-green-400 font-medium">Refresh the Gallery</span>
+                       <CheckCircle className="w-5 h-5 text-emerald-400" />
+                       <span className="text-emerald-300 font-medium tracking-wide">Gallery Connected</span>
                      </>
                    ) : (
                      <>
-                       <AlertCircle className="w-5 h-5 text-yellow-500" />
-                       <span className="text-yellow-400 font-medium">Using fallback images</span>
+                       <AlertCircle className="w-5 h-5 text-amber-400" />
+                       <span className="text-amber-300 font-medium tracking-wide">Using Local Images</span>
                      </>
                    )}
                  </div>
-                 <span className="text-gray-400">•</span>
-                 <span className="text-gray-300">{galleryImages.length} images loaded</span>
+                 <div className="hidden sm:block w-1 h-1 bg-gray-500 rounded-full"></div>
+                 <span className="text-gray-300 font-light">{galleryImages.length} images loaded</span>
                </div>
+               
+               {/* Refresh Button */}
                <button
                  onClick={fetchImages}
                  disabled={loading}
-                 className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors"
+                 className="group flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 disabled:from-gray-800 disabled:to-gray-900 text-white rounded-lg transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:opacity-50 shadow-lg hover:shadow-xl border border-gray-600/50"
                >
-                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                 <span>{loading ? 'Refreshing...' : 'Refresh'}</span>
+                 <RefreshCw className={`w-4 h-4 transition-transform duration-300 ${loading ? 'animate-spin' : 'group-hover:rotate-180'}`} />
+                 <span className="font-medium tracking-wide">
+                   {loading ? 'Refreshing...' : 'Refresh Gallery'}
+                 </span>
                </button>
              </div>
+             
+             {/* Last Refresh Time */}
+             {lastRefresh && (
+               <div className="mt-3 pt-3 border-t border-gray-700/50">
+                 <p className="text-xs text-gray-400 font-light">
+                   Last updated: {lastRefresh.toLocaleTimeString()}
+                 </p>
+               </div>
+             )}
            </div>
 
           {/* Error Message */}
