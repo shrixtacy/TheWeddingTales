@@ -9,13 +9,31 @@ interface LoadingAnimationProps {
 const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onComplete }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [videoError, setVideoError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    // Check if device is mobile
+    const mobileCheck = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    setIsMobile(mobileCheck);
+
+    if (mobileCheck) {
+      // For mobile: Skip video animation and complete loading quickly
+      console.log('Mobile device detected - skipping video animation');
+      const mobileTimeout = setTimeout(() => {
+        console.log('Mobile quick loading complete');
+        setIsVisible(false);
+        onComplete();
+      }, 1500); // Very short delay for mobile
+
+      return () => clearTimeout(mobileTimeout);
+    }
+
+    // Desktop video animation logic
     const video = videoRef.current;
     if (!video) return;
 
-    console.log('Loading animation mounted');
+    console.log('Desktop loading animation mounted');
 
     const handleVideoEnd = () => {
       console.log('Video ended - completing loading');
@@ -26,7 +44,6 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onComplete }) => {
     const handleVideoError = (e: Event) => {
       console.error('Video error:', e);
       setVideoError(true);
-      // Fallback: complete loading after 3 seconds if video fails
       setTimeout(() => {
         console.log('Video error fallback - completing loading');
         setIsVisible(false);
@@ -47,46 +64,22 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onComplete }) => {
       });
     };
 
-    // Mobile-specific optimizations
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-      // Shorter timeout for mobile to prevent long loading
-      const mobileTimeout = setTimeout(() => {
-        console.log('Mobile timeout reached - completing loading');
-        setIsVisible(false);
-        onComplete();
-      }, 4000);
-      
-      video.addEventListener('ended', handleVideoEnd);
-      video.addEventListener('error', handleVideoError);
-      video.addEventListener('canplay', handleVideoCanPlay);
+    video.addEventListener('ended', handleVideoEnd);
+    video.addEventListener('error', handleVideoError);
+    video.addEventListener('canplay', handleVideoCanPlay);
 
-      return () => {
-        video.removeEventListener('ended', handleVideoEnd);
-        video.removeEventListener('error', handleVideoError);
-        video.removeEventListener('canplay', handleVideoCanPlay);
-        clearTimeout(mobileTimeout);
-      };
-    } else {
-      // Desktop timeout
-      video.addEventListener('ended', handleVideoEnd);
-      video.addEventListener('error', handleVideoError);
-      video.addEventListener('canplay', handleVideoCanPlay);
+    const maxTimeout = setTimeout(() => {
+      console.log('Max timeout reached - completing loading');
+      setIsVisible(false);
+      onComplete();
+    }, 6000);
 
-      const maxTimeout = setTimeout(() => {
-        console.log('Max timeout reached - completing loading');
-        setIsVisible(false);
-        onComplete();
-      }, 6000);
-
-      return () => {
-        video.removeEventListener('ended', handleVideoEnd);
-        video.removeEventListener('error', handleVideoError);
-        video.removeEventListener('canplay', handleVideoCanPlay);
-        clearTimeout(maxTimeout);
-      };
-    }
+    return () => {
+      video.removeEventListener('ended', handleVideoEnd);
+      video.removeEventListener('error', handleVideoError);
+      video.removeEventListener('canplay', handleVideoCanPlay);
+      clearTimeout(maxTimeout);
+    };
   }, [onComplete]);
 
   if (!isVisible) {
@@ -103,13 +96,30 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onComplete }) => {
         minWidth: '100vw'
       }}
     >
-      {videoError ? (
+      {isMobile ? (
+        // Simple loading screen for mobile
+        <div className="text-white text-center px-4 max-w-sm mx-auto">
+          <div className="animate-pulse">
+            <h1 
+              className="font-semibold mb-4 leading-tight text-2xl"
+            >
+              The Wedding Tales
+            </h1>
+            <p 
+              className="font-light tracking-wider text-sm opacity-80"
+            >
+              Experience the Art of Luxury Wedding Photography
+            </p>
+          </div>
+        </div>
+      ) : videoError ? (
+        // Fallback for desktop video error
         <div className="text-white text-center px-4 max-w-sm mx-auto">
           <div className="animate-pulse">
             <h1 
               className="font-semibold mb-2 sm:mb-4 leading-tight"
               style={{
-                fontSize: 'clamp(1.5rem, 8vw, 4rem)',
+                fontSize: 'clamp(1.1rem, 5vw, 2.2rem)',
                 lineHeight: '1.1'
               }}
             >
@@ -118,15 +128,16 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onComplete }) => {
             <p 
               className="font-light tracking-wider"
               style={{
-                fontSize: 'clamp(0.875rem, 4vw, 1.5rem)',
+                fontSize: 'clamp(0.7rem, 2.5vw, 1rem)',
                 lineHeight: '1.2'
               }}
             >
-              PHOTOGRAPHY & FILMS.
+              Experience the Art of Luxury Wedding Photography
             </p>
           </div>
         </div>
       ) : (
+        // Video animation for desktop
         <div className="w-full h-full flex items-center justify-center">
           <video
             ref={videoRef}
@@ -142,7 +153,7 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onComplete }) => {
             onPlay={() => console.log('Video playing')}
             onError={(e) => console.error('Video error event:', e)}
           >
-            <source src="/images/TwtLoadinganimation.mp4" type="video/mp4" />
+            <source src="/images/twtlol.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>

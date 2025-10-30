@@ -1,12 +1,12 @@
 import Navbar from '@/components/Navbar'
-import GalleryPage from '@/components/GalleryPage'
+import ProxyGoogleDriveGallery from '@/components/ProxyGoogleDriveGallery'
 import Footer from '@/components/Footer'
 
 export default function Gallery() {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <GalleryPage />
+      <ProxyGoogleDriveGallery />
       <Footer />
     </div>
   )

@@ -142,7 +142,7 @@ const About: React.FC = memo(() => {
               }}
             >
               <Image 
-                src="/images/6S8A9608.jpg"
+                src="/About-us/Picsart_23-01-01_19-21-08-002.jpg"
                 alt="Portrait"
                 width={800}
                 height={800}

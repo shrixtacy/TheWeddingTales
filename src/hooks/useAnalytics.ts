@@ -13,9 +13,12 @@ export const useAnalytics = (page: string) => {
       try {
         // Add timeout to prevent hanging
         const controller = new AbortController()
-        const fetchTimeoutId = setTimeout(() => controller.abort(), 3000) // Reduced timeout
+        // Pass 'timeout' reason for modern browsers; fallback to abort without reason for support
+        const fetchTimeoutId = setTimeout(() => {
+          try { controller.abort('timeout') } catch { controller.abort() } // Reason is optional
+        }, 3000) // Reduced timeout
         
-        await fetch('/api/analytics/track', {
+        const response = await fetch('/api/analytics/track', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -28,10 +31,54 @@ export const useAnalytics = (page: string) => {
         })
         
         clearTimeout(fetchTimeoutId)
+        
+        if (!response.ok) {
+          throw new Error(`Analytics tracking failed: ${response.status}`)
+        }
+        
+        // Store successful tracking in localStorage for offline fallback
+        const trackingData = {
+          page,
+          timestamp: new Date().toISOString(),
+          user_agent: navigator.userAgent,
+        }
+        
+        // Store in localStorage for offline analytics
+        const existingData = JSON.parse(localStorage.getItem('offline_analytics') || '[]')
+        existingData.push(trackingData)
+        
+        // Keep only last 100 entries to prevent localStorage bloat
+        if (existingData.length > 100) {
+          existingData.splice(0, existingData.length - 100)
+        }
+        
+        localStorage.setItem('offline_analytics', JSON.stringify(existingData))
+        
       } catch (error) {
         // Silently fail analytics to not block the UI
-        if (error instanceof Error && error.name !== 'AbortError') {
+        // Ignore all abort errors (with/without reason)
+        if (error instanceof Error && error.name === 'AbortError') {
+          return
+        }
+        if (error instanceof Error) {
           console.warn('Analytics tracking failed:', error)
+          
+          // Store failed tracking attempt for later retry
+          const trackingData = {
+            page,
+            timestamp: new Date().toISOString(),
+            user_agent: navigator.userAgent,
+            failed: true
+          }
+          
+          const existingData = JSON.parse(localStorage.getItem('offline_analytics') || '[]')
+          existingData.push(trackingData)
+          
+          if (existingData.length > 100) {
+            existingData.splice(0, existingData.length - 100)
+          }
+          
+          localStorage.setItem('offline_analytics', JSON.stringify(existingData))
         }
       } finally {
         isTracking = false

@@ -3,53 +3,35 @@ import { supabase } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if request has body and is not empty
-    const contentType = request.headers.get('content-type')
-    if (!contentType || !contentType.includes('application/json')) {
-      return NextResponse.json({ error: 'Invalid content type' }, { status: 400 })
-    }
+    const body = await request.json()
+    const { page, user_agent } = body
 
-    // Read the raw body first to check if it's empty
-    const rawBody = await request.text()
-    if (!rawBody || rawBody.trim() === '') {
-      return NextResponse.json({ error: 'Empty request body' }, { status: 400 })
-    }
+    // Get client IP address
+    const ip = request.headers.get('x-forwarded-for') || 
+              request.headers.get('x-real-ip') || 
+              'unknown'
 
-    // Safely parse JSON with fallback
-    let page = 'unknown'
-    let user_agent = 'unknown'
-    
-    try {
-      const body = JSON.parse(rawBody)
-      page = body.page || 'unknown'
-      user_agent = body.user_agent || 'unknown'
-    } catch (parseError) {
-      console.warn('Failed to parse JSON, using defaults:', parseError)
-      // Return early to avoid database operations with invalid data
-      return NextResponse.json({ error: 'Invalid JSON format' }, { status: 400 })
-    }
-    
-    // Get client IP
-    const forwarded = request.headers.get('x-forwarded-for')
-    const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown'
-
+    // Insert visit into Supabase
     const { error } = await supabase
       .from('website_visits')
       .insert([
         {
           page,
           timestamp: new Date().toISOString(),
-          user_agent: user_agent || request.headers.get('user-agent') || 'unknown',
+          user_agent: user_agent || 'unknown',
           ip_address: ip,
         },
       ])
 
     if (error) {
-      console.error('Error tracking visit:', error)
+      console.error('Error inserting visit:', error)
       return NextResponse.json({ error: 'Failed to track visit' }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Visit tracked successfully' 
+    })
   } catch (error) {
     console.error('Error in track route:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
