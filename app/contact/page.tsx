@@ -294,17 +294,29 @@ Please share your package details and availability. Looking forward to hearing f
                 
                 {contactInfo.map((info, index) => {
                   const IconComponent = info.icon;
+                  const isPhone = info.title === "Phone";
                   return (
                     <div key={index} className="flex items-start space-x-4 group">
                       <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center group-hover:bg-white/10 transition-colors duration-300 flex-shrink-0">
                         <IconComponent className="text-white group-hover:text-gray-300 transition-colors duration-300" size={20} />
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <h4 className="text-white font-body font-medium mb-1">{info.title}</h4>
                         {info.details.map((detail, idx) => (
-                          <p key={idx} className="text-gray-400 font-body text-sm">
-                            {detail}
-                          </p>
+                          <div key={idx} className="flex items-center gap-3">
+                            <p className="text-gray-400 font-body text-sm">
+                              {detail}
+                            </p>
+                            {isPhone && (
+                              <a
+                                href={info.action}
+                                className="inline-flex items-center px-4 py-2 bg-white text-black hover:bg-gray-200 border-2 border-white font-semibold text-xs font-body tracking-wider transition-all duration-300 rounded shadow-lg hover:shadow-xl hover:scale-105"
+                              >
+                                <Phone size={14} className="mr-1.5" />
+                                CALL NOW
+                              </a>
+                            )}
+                          </div>
                         ))}
                       </div>
                     </div>

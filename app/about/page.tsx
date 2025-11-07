@@ -151,21 +151,9 @@ const AboutPage = memo(() => {
         <div className="max-w-7xl mx-auto px-8 relative">
           {/* Editorial Header with Blur Animation */}
           <div className="text-center mb-24">
-            <div className="editorial-heading text-gray-400 mb-8">
-              AUTHENTIC, EVOCATIVE
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display text-white mb-8 leading-tight">
-              <div>
-                MEET THE ELEGANCE
-              </div>
-              <div>
-                BEHIND THE LENS
-              </div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display text-white mb-8 leading-tight font-light">
+              MEET WITH <span className="font-semibold">CHIKU</span> - THE VISION BEHIND <span className="font-semibold">THE WEDDING TALES</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-body">
-              We are storytellers who believe every love story deserves to be told with authenticity, 
-              creativity, and timeless elegance.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-20">
@@ -195,28 +183,27 @@ const AboutPage = memo(() => {
 
             {/* Content Section - Editorial Style */}
             <div className="space-y-8">
-              <div>
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display text-white mb-8 leading-tight font-light">
-                  Crafting <span className="text-gray-400">Timeless</span><br />
-                  Wedding Stories
+              <div className="text-center">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display text-white mb-8 leading-tight font-light">
+                  MEET WITH <span className="font-semibold">CHIKU</span> - THE VISION BEHIND <span className="font-semibold">THE WEDDING TALES</span>
                 </h2>
                 
                 <p className="text-lg text-gray-300 leading-relaxed mb-6 font-body">
-                  Hi, I'm Cheeku, a passionate photographer with a keen eye for detail and storytelling. 
-                  Through my lens, I aim to capture authentic emotions, timeless moments, and the beauty 
-                  hidden in everyday life.
+                  Hi, I'm <span className="font-semibold text-white">Cheeku</span>, a <span className="font-semibold text-white">passionate photographer</span> with a <span className="font-semibold text-white">keen eye for detail and storytelling</span>. 
+                  Through my lens, I aim to capture <span className="font-semibold text-white">authentic emotions</span>, <span className="font-semibold text-white">timeless moments</span>, and the <span className="font-semibold text-white">beauty 
+                  hidden in everyday life</span>.
                 </p>
                 
                 <p className="text-lg text-gray-300 leading-relaxed mb-6 font-body">
-                  My journey with photography began during my college days, and since then, I've explored 
-                  various styles including portrait, lifestyle, wedding, travel, product, and fashion. 
-                  Each photograph I take reflects not just a scene — but a story, emotion, and perspective.
+                  My journey with photography began during my <span className="font-semibold text-white">college days</span>, and since then, I've explored 
+                  various styles including <span className="font-semibold text-white">portrait, lifestyle, wedding, travel, product, and fashion</span>. 
+                  Each photograph I take reflects not just a scene — but a <span className="font-semibold text-white">story, emotion, and perspective</span>.
                 </p>
                 
                 <p className="text-lg text-gray-300 leading-relaxed mb-8 font-body">
-                  I believe that photography is more than just art — it's a way to preserve memories and 
-                  express individuality. Whether I'm working on a client project or a personal shoot, my 
-                  focus remains on creating meaningful, high quality visuals that connect with people.
+                  I believe that photography is <span className="font-semibold text-white">more than just art</span> — it's a way to <span className="font-semibold text-white">preserve memories</span> and 
+                  <span className="font-semibold text-white">express individuality</span>. Whether I'm working on a client project or a personal shoot, my 
+                  focus remains on creating <span className="font-semibold text-white">meaningful, high quality visuals</span> that <span className="font-semibold text-white">connect with people</span>.
                 </p>
 
                 <button 
