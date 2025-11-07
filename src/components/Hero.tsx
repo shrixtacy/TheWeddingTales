@@ -117,14 +117,14 @@ const Hero: React.FC = memo(() => {
         <div className={`max-w-4xl transition-opacity duration-1000 ${
           isMobileTextFaded ? 'md:opacity-100 opacity-0' : 'opacity-100'
         }`}>
-          <h1 className={`text-2xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight hero-text-blur ${
+          <h1 className={`text-xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-snug hero-text-blur ${
             !isTextBlurred ? 'visible' : ''
           }`}>
             <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
-              Experience the Art of Luxury
+              Luxury Wedding
             </div>
             <div className={`hero-text-line ${!isTextBlurred ? 'visible' : ''}`}>
-              Wedding Photography
+              Photography & Films
             </div>
           </h1>
           
